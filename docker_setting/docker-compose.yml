@@ -1,0 +1,21 @@
+services:
+  react:
+    container_name: react
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: react
+    stdin_open: true
+    tty: true
+    volumes:
+      - react_vol:/var/lib/my_react
+    restart: always
+
+volumes:
+  react_vol:
+    name: react_vol
+    driver: local
+    driver_opts:
+      type: none
+      device: srcs
+      o: bind
