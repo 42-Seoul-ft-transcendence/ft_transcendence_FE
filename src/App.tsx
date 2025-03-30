@@ -1,4 +1,5 @@
 import './App.css'
+import './index.css'
 import './components/MainPage.tsx';
 import MainPage from './components/MainPage.tsx';
 
