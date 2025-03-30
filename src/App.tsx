@@ -8,6 +8,7 @@ import LobbyPage from './components/LobbyPage.tsx';
 import RoomPage from './components/RoomPage.tsx';
 import GamePage from './components/GamePage.tsx';
 import ProtectedRoute from './components/ProtectedRoute.tsx';
+import NotFoundPage from './components/NotFoundPage.tsx';
 
 import {Route, Routes, Navigate } from 'react-router-dom'
 
@@ -22,6 +23,7 @@ function App() {
       <Route path="/lobby" element={<ProtectedRoute><LobbyPage /></ProtectedRoute>} />
       <Route path="/room/:roomid" element={<ProtectedRoute><RoomPage /></ProtectedRoute>} />
       <Route path="/game/:gameid" element={<ProtectedRoute><GamePage /></ProtectedRoute>} />
+      <Route path="/*" element={<NotFoundPage />} />
     </Routes>
   )
 }
