@@ -1,5 +1,4 @@
-import React from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import BackGround from '../assets/background.png';
 import GameStart from '../assets/start_button.svg';
 import Logo from '../assets/logo.svg';
