@@ -1,17 +1,7 @@
 const NotFoundPage = () => {
 	return (
-		<div
-			style={{
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "center",
-				fontSize: 64,
-				position: "absolute",
-				width: "100%",
-				height: "100%",
-			}}
-		>
-			404 Not Found
+		<div className="flex items-center justify-center text-6xl absolute w-full h-full">
+  		404 Not Found
 		</div>
 	)
 }
