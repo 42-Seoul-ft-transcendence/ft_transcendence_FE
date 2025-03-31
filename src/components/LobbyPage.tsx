@@ -1,14 +1,10 @@
-import BackGround from '../assets/background.png';
-
+import BackGroundImage from './BackGroundImage'
 const LobbyPage = () => {
 	return (
 		<>
-			<div 
-      className="relative w-full h-screen flex flex-col items-center justify-center bg-cover bg-center"
-      style={{ backgroundImage: `url(${BackGround})` }}
-    	>
+			<BackGroundImage>
 				<h1>Lobby Page</h1>
-			</div>
+			</BackGroundImage>
 		</>
 	)
 }
