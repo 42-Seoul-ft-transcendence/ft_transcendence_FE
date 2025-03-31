@@ -13,8 +13,7 @@ function MainPage() {
 					{/* <img src={BackGround} className="w-full h-full object-cover" alt="background" /> */}
 					<img 
 						src={Logo}
-						className="w-[50vw] max-w-[1000px] h-auto object-contain"
-						style={{ marginTop: "15vh" }}
+						className="w-[50vw] max-w-[1000px] h-auto object-contain mt-[15vh]"
 						alt="logo" />
 					<GameStartButton />
 				</div>
@@ -31,8 +30,7 @@ const GameStartButton = () => {
 	return (
 		<button 
 			onClick={handleGameStart} 
-			className="w-[30vw] max-w-[1000px] h-auto"
-			style={{ marginBottom: "25vh" }}
+			className="w-[30vw] max-w-[1000px] h-auto mb-[25vh]"
 		>
 			<img src={GameStart} alt="gameStartButton" className="w-full h-full object-contain" />
 		</button>
