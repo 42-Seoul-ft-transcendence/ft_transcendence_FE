@@ -1,4 +1,4 @@
-import { GoogleOAuthProvider, GoogleLogin, TokenResponse, useGoogleLogin } from '@react-oauth/google';
+import { GoogleOAuthProvider, TokenResponse, useGoogleLogin } from '@react-oauth/google';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BackGroundImage from './BackGroundImage'
@@ -19,8 +19,7 @@ const LoginPage = () => {
 				<div className="flex flex-col items-center justify-between h-full gap-[5vh]">
 					<img 
 					src={Logo}
-					className="w-[50vw] max-w-[1000px] h-auto object-contain"
-					style={{ marginTop: "25vh" }}
+					className="w-[50vw] max-w-[1000px] h-auto object-contain mt-[25vh]"
 					alt="logo" />
 					<GoogleOAuthProvider
 						clientId="159654952348-o1bu0cmsii9la17th5ih0c9flh4svoqu.apps.googleusercontent.com">
@@ -65,9 +64,10 @@ const Login = () => {
 	})
 
 	return (
-			<button onClick={() => login()}
-			className="w-[30vw] max-w-[1000px] h-auto"
-			style={{ marginBottom: "35vh" }}>
+			<button 
+				onClick={() => login()}
+				className="w-[30vw] max-w-[1000px] h-auto mb-[35vh]"
+			>
       	<img src={LoginButton} alt="Google 로그인" className="w-full h-full object-contain" />
     	</button>
 	)
