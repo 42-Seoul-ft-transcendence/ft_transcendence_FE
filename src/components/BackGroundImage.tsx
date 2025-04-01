@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import BackGround from '../assets/background.png';
 
 type Props= {
 	className?: string;
@@ -10,8 +9,10 @@ const BackGroundImage = ({ className="", children }: Props) => {
 	return (
 		<>
 			<div 
-				className={`relative w-full h-screen flex flex-col items-center justify-center bg-cover bg-center ${className}`}
-				style={{ backgroundImage: `url(${BackGround})` }}
+				className={
+					`relative w-full h-screen flex flex-col items-center justify-center bg-cover bg-center
+					bg-[url("/../src/assets/background.png")]
+					${className}`}
 			>
 				{children}
 			</div>
