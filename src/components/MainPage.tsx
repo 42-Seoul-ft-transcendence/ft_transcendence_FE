@@ -1,15 +1,12 @@
 import { useNavigate } from 'react-router-dom';
-import BackGround from '../assets/background.png';
+import BackGroundImage from './BackGroundImage'
 import GameStart from '../assets/start_button.svg';
 import Logo from '../assets/logo.svg';
 
 function MainPage() {
   return (
-    <div 
-      className="relative w-full h-screen flex flex-col items-center justify-center bg-cover bg-center"
-      style={{ backgroundImage: `url(${BackGround})` }}
-    >
-				<div className="flex flex-col items-center justify-between h-full gap-[10vh]">
+    <BackGroundImage>
+				<div className="flex flex-col items-center justify-between h-full gap-[5vh]">
 					{/* <img src={BackGround} className="w-full h-full object-cover" alt="background" /> */}
 					<img 
 						src={Logo}
@@ -17,7 +14,7 @@ function MainPage() {
 						alt="logo" />
 					<GameStartButton />
 				</div>
-    </div>
+    </BackGroundImage>
   )
 }
 
