@@ -4,6 +4,7 @@ import JoinRoom from '../assets/join_room.svg'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Modal from './Modal'
+import Header from './Header'
 
 const LobbyPage = () => {
 	const [roomList, setRoomList] = useState<boolean>(false)
@@ -11,6 +12,7 @@ const LobbyPage = () => {
 	return (
 		<>
 			<BackGroundImage>
+				<Header />
 				{(!roomList && (
 					<div className="flex gap-[10vh]">
 						<CreateRoomButton />
@@ -27,12 +29,20 @@ const CreateRoomButton = () => {
 	const [isCreatingRoom, setIsCreatingRoom] = useState<boolean>(false)
 	const [roomTitle, setRoomTitle] = useState<string>("")
 	const [isMultiGame, setIsMultiGame] = useState<boolean>(false)
+	const [loading, setLoading] = useState(false)
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setRoomTitle(event.target.value);
 	}
 
 	const handleCreateRoom = () => {
+		if (loading) return
+			setLoading(true)
+		if (!roomTitle.trim()) {
+			alert("방 제목을 입력해주세요.")
+			return
+		}
+
 		const accessToken = localStorage.getItem("accessToken")
 		const userId = localStorage.getItem("userId")
 
@@ -43,12 +53,14 @@ const CreateRoomButton = () => {
 				userId: userId,
 				accessToken: accessToken,
 				roomTitle: roomTitle,
-				multiGmae: isMultiGame })
+				multiGame: isMultiGame })
 		})
 		.then((res) => res.json())
 		.then((data) => {
-			navigate(`/room/:${data.roomId}`)
+			setIsCreatingRoom(false)
+			navigate(`/room/${data.roomId}`)
 		})
+		.finally(() => setLoading(false))
 		.catch(() => {
 			alert("방 생성에 실패하였습니다. 잠시 후 다시 시도하여 주세요.")
 			setIsCreatingRoom(false)
@@ -94,6 +106,7 @@ const CreateRoomButton = () => {
 				</div>
 				<button
 					onClick={handleCreateRoom}
+					disabled={loading}
 					className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700"
 				>
 					생성
