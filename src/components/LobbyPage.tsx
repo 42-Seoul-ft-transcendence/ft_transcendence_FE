@@ -37,11 +37,11 @@ const CreateRoomButton = () => {
 
 	const handleCreateRoom = () => {
 		if (loading) return
-			setLoading(true)
 		if (!roomTitle.trim()) {
 			alert("방 제목을 입력해주세요.")
 			return
 		}
+		setLoading(true)
 
 		const accessToken = localStorage.getItem("accessToken")
 		const userId = localStorage.getItem("userId")
