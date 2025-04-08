@@ -9,7 +9,9 @@ export function Modal({ isOpen, onClose, className="", children }: ModalProps) {
 	if (!isOpen) return null // 모달이 닫혀 있으면 렌더링 안 함
   
 	return (
-		<div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+		<div 
+			className={"fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"}
+		>
 			{/* 모달 박스 */}
 			<div className={`bg-white p-6 rounded-lg shadow-lg w-96 ${className}`}>
 		  	{children}
@@ -20,7 +22,7 @@ export function Modal({ isOpen, onClose, className="", children }: ModalProps) {
 					닫기
 				</button>
 			</div>
-	  	</div>
+	  </div>
 	)
 }
 
