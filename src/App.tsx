@@ -6,6 +6,7 @@ import LoginPage from './components/LoginPage.tsx';
 import RegisterPage from './components/RegisterPage.tsx';
 import VerifyPage from './components/VerifyPage.tsx';
 import LobbyPage from './components/LobbyPage.tsx';
+import RoomListPage from './components/RoomListPage.tsx';
 import RoomPage from './components/RoomPage.tsx';
 import GamePage from './components/GamePage.tsx';
 import ProtectedRoute from './components/ProtectedRoute.tsx';
@@ -23,6 +24,7 @@ function App() {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/verify" element={<VerifyPage />} />
       <Route path="/lobby" element={<ProtectedRoute><LobbyPage /></ProtectedRoute>} />
+      <Route path="/rooms" element={<ProtectedRoute><RoomListPage /></ProtectedRoute>} />
       <Route path="/room/:roomid" element={<ProtectedRoute><RoomPage /></ProtectedRoute>} />
       <Route path="/game/:gameid" element={<ProtectedRoute><GamePage /></ProtectedRoute>} />
       <Route path="/*" element={<NotFoundPage />} />

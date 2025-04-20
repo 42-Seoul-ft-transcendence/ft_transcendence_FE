@@ -7,18 +7,14 @@ import Modal from './Modal'
 import Header from './Header'
 
 const LobbyPage = () => {
-	const [roomList, setRoomList] = useState<boolean>(false)
-
 	return (
 		<>
 			<BackGroundImage>
 				<Header />
-				{(!roomList && (
 					<div className="flex gap-[10vh]">
 						<CreateRoomButton />
-						<JoinRoomButton setRoomList={setRoomList} />
-					</div>)) || 
-					<RoomList setRoomList={setRoomList} />}
+						<JoinRoomButton />
+					</div>
 			</BackGroundImage>
 		</>
 	)
@@ -116,27 +112,20 @@ const CreateRoomButton = () => {
 	)
 }
 
-const JoinRoomButton = ({ setRoomList }: { setRoomList: React.Dispatch<React.SetStateAction<boolean>> }) => {
+const JoinRoomButton = () => {
+	const navigate = useNavigate()
+
+	const handleJoinRoom = () => {
+		navigate("/rooms")
+	}
+
 	return (
 		<div>
 			<button
-				onClick={() => setRoomList(true)}
+				onClick={() => handleJoinRoom()}
 				className="w-[25vw] max-w-[1000px] h-auto mb-[20vh]"
 			>
 				<img src={JoinRoom} alt="JoinRoomButton" className="w-full h-full object-contain" />
-			</button>
-		</div>
-	)
-}
-
-const RoomList = ({ setRoomList }: { setRoomList: React.Dispatch<React.SetStateAction<boolean>> }) => {
-	return (
-		<div>
-			<button
-				onClick={() => setRoomList(false)}
-				className="w-[25vw] max-w-[1000px] h-auto mb-[20vh]"
-			>
-				뒤로 가기
 			</button>
 		</div>
 	)
