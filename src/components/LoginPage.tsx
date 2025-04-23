@@ -6,6 +6,8 @@ import Logo from '../assets/logo.svg';
 import LoginButton from '../assets/login_button.svg'
 import IsLoggedIn from './IsLoggedIn';
 
+const API_BASE = "https://back-coffeego.com"
+
 const LoginPage = () => {
 	const navigate = useNavigate()
 	useEffect(() => {
@@ -22,7 +24,7 @@ const LoginPage = () => {
 					className="w-[50vw] max-w-[1000px] h-auto object-contain mt-[25vh]"
 					alt="logo" />
 					<GoogleOAuthProvider
-						clientId="159654952348-o1bu0cmsii9la17th5ih0c9flh4svoqu.apps.googleusercontent.com">
+						clientId="638924682010-jhcf91jmst7nvq9ks9080gnvmqs4lpj8.apps.googleusercontent.com">
 							<Login />
 					</GoogleOAuthProvider>
 				</div>
@@ -35,16 +37,17 @@ const Login = () => {
 	const navigate = useNavigate()
 
 	const handleSuccess = (response: TokenResponse) => {
-		fetch("/api/auth/google", {
+		fetch(`${API_BASE}/ft/api/auth/login/google`, {
 			method: "POST",
 			headers: { "content-Type": "application/json" },
-			body: JSON.stringify({ token: response.access_token }),
+			body: JSON.stringify({ googleAccessToken: response.access_token }),
 		})
 		.then((res) => res.json())
 		.then((data) => {
 			localStorage.setItem("userId", data.userId)
 			localStorage.setItem("accessToken", data.accessToken)
-			if (data.newUser) {
+			localStorage.setItem("refreshToken", data.refreshToken)
+			if (data.isNewUser == "") {
 				navigate("/register")
 			}
 			else {
