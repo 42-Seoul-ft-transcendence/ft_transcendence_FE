@@ -1,6 +1,5 @@
 const IsLoggedIn = (): boolean => {
 	// local storage 에서 "userid" 와 "accessToken" 유무 확인
-	return true
 	if (!!localStorage.getItem("userId"))
 		return true
 	else
