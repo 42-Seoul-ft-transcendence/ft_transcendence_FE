@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import BackGroundImage from './BackGroundImage'
-import GameStart from '../assets/start_button.svg';
+import GameStart from '../assets/button/start_button.svg';
 import Logo from '../assets/logo.svg';
 
 function MainPage() {
