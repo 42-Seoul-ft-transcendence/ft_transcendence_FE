@@ -28,6 +28,7 @@ const OTPRegister = () => {
     })
     .then((res) => res.json())
     .then((data) => {
+      localStorage.setItem("secret", data.secret)
       setQrCodeUrl(data.qrCodeUrl)
     })
     .catch((err) => {
