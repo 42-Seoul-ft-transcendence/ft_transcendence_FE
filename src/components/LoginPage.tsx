@@ -45,13 +45,13 @@ const Login = () => {
 		.then((res) => res.json())
 		.then((data) => {
 			localStorage.setItem("userId", data.userId)
-			localStorage.setItem("accessToken", data.accessToken)
-			localStorage.setItem("refreshToken", data.refreshToken)
-			if (data.isNewUser == "") {
-				navigate("/register")
+			if (data.reauireTFA) {
+				navigate("/verify")
 			}
 			else {
-				navigate("/verify")
+				localStorage.setItem("accessToken", data.accessToken)
+				localStorage.setItem("refreshToken", data.refreshToken)
+				navigate("/lobby")
 			}
 		})
 		.catch((err) => {
