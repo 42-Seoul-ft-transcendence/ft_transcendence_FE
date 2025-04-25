@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BackGroundImage from './BackGroundImage'
 import Logo from '../assets/logo.svg';
-import LoginButton from '../assets/login_button.svg'
+import LoginButton from '../assets/button/login_button.svg'
 import IsLoggedIn from './IsLoggedIn';
 
 const API_BASE = "https://back-coffeego.com"
