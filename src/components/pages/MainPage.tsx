@@ -22,7 +22,7 @@ const GameStartButton = () => {
 	const navigate = useNavigate()
 
 	const handleGameStart = () => {
-		navigate("/lobby")
+		navigate("/login")
 	}
 	return (
 		<button 
