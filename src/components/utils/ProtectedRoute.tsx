@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom'
-import IsLoggedIn from './IsLoggedIn'
+import IsLoggedIn from './utils/IsLoggedIn'
 
 function ProtectedRoute ({ children }: { children: React.ReactNode }) {
 	if (!IsLoggedIn()) {

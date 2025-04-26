@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import BackGroundImage from './BackGroundImage'
+import BackGroundImage from '../common/BackGroundImage'
 import GameStart from '../assets/button/start_button.svg';
 import Logo from '../assets/logo.svg';
 

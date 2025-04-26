@@ -1,7 +1,7 @@
-import BackGroundImage from './BackGroundImage';
-import CreateRoomButton from './CreateRoomButton';
+import BackGroundImage from '../../common/BackGroundImage.tsx';
+import CreateRoomButton from './CreateRoomButton.tsx';
 import JoinRoomButton from './JoinRoomButton.tsx';
-import Header from './Header';
+import Header from '../../common/Header.tsx';
 
 const LobbyPage = () => {
   return (

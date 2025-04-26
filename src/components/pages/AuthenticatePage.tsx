@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom'
-import BackGroundImage from './BackGroundImage'
+import BackGroundImage from './common/BackGroundImage'
 import { useState, useRef } from 'react'
 
-const VerifyPage = () => {
+const AuthenticatePage = () => {
 	const navigate = useNavigate()
 	const [otpCode, setOtpCode] = useState<string>("")
 
@@ -32,14 +32,14 @@ const VerifyPage = () => {
       inputsRef.current[index - 1]?.focus()
     }
 		else if (e.key == "Enter")
-			handleVerify()
+			handleAuthenticate()
   }
 
-	const handleVerify = () => {
+	const handleAuthenticate = () => {
 		if (!otpCode.trim() || otpCode.length != length)
 			return
 
-		verifyOTP(otpCode, navigate)
+		authenticate(otpCode, navigate)
 	}
 
 	return (
@@ -71,7 +71,7 @@ const VerifyPage = () => {
 					))}
 				</div>
 				<button 
-					onClick={handleVerify}
+					onClick={handleAuthenticate}
 					className="px-4 py-2 text-white bg-green-500 hover:bg-green-700 transition mt-4 rounded"
 				>
 					인증하기
@@ -81,32 +81,36 @@ const VerifyPage = () => {
 	)
 }
 
-const verifyOTP = (otpCode: string, navigate: ReturnType<typeof useNavigate>) => {
-	const accessToken = localStorage.getItem("accessToken")
-	if (!accessToken) {
+const authenticate = (otpCode: string, navigate: ReturnType<typeof useNavigate>) => {
+	const userId = localStorage.getItem("userId")
+	if (!userId) {
 		alert("로그인이 필요합니다.")
 		navigate("/")
-	}
-	const secret = localStorage.getItem("secret")
-	if (!secret) {
-		alert("비정상적인 접근입니다.")
-		navigate("/lobby")
+		return
 	}
 
-	fetch(`${import.meta.env.VITE_API_BASE}/ft/api/auth/2fa/verify`, {
+	fetch(`${import.meta.env.VITE_API_BASE}/ft/api/auth/2fa/authenticate`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ token: otpCode, secret }),
+		body: JSON.stringify({ userId, token: otpCode }),
 	})
 	.then((res) => {
-		localStorage.removeItem("secret")
 		if (!res.ok) throw new Error("HTTP 오류")
-		alert("2FA 등록 완료")
+		return res.json()
+	})
+	.then((data) => {
+		if (data.success)
+		{
+			localStorage.setItem("accessToken", data.accessToken)
+			localStorage.setItem("refreshToken", data.refreshToken)
+			navigate("/lobby")
+		}
+		else throw new Error()
 	})
 	.catch(() => {
 		alert("OTP 인증 오류")
+		navigate("/")
 	})
-	navigate("/lobby")
 }
 
-export default VerifyPage
+export default AuthenticatePage

@@ -1,4 +1,4 @@
-import BackGroundImage from './BackGroundImage';
+import BackGroundImage from './common/BackGroundImage';
 import { useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { useNavigate } from 'react-router-dom';

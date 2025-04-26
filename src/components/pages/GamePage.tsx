@@ -1,4 +1,4 @@
-import BackGroundImage from './BackGroundImage'
+import BackGroundImage from './common/BackGroundImage'
 
 
 const GamePage = () => {

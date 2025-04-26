@@ -1,6 +1,6 @@
-import BackGroundImage from './BackGroundImage'
+import BackGroundImage from './common/BackGroundImage'
 import { useEffect, useState } from 'react'
-import Header from './Header'
+import Header from './common/Header'
 
 interface GameRoom {
   id: string;

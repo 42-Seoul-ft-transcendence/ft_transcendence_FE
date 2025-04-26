@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Modal from './Modal';
+import Modal from '../../common/Modal';
 import { useNavigate } from 'react-router-dom';
 
 type Props = {
