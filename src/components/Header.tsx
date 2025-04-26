@@ -1,5 +1,9 @@
-import { useEffect, useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import HeaderLogo from '../assets/header_logo.svg';
+import InvitationIcon from '../assets/icon/invitation.svg';
+import BuddyIcon from '../assets/icon/buddy.svg';
+import MenuIcon from '../assets/icon/menu.svg';
 
 type SideModalProps = {
   isOpen: boolean
@@ -17,11 +21,12 @@ const Header = () => {
 	}
 
 	return (
-		<header className="fixed top-0 z-10 w-full flex items-center justify-between p-4 bg-black/40 text-white">
-			<button onClick={handleMainButton}>PONG!</button>
-			<nav className="space-x-4">
-				<button onClick={() => setIsMypageModal(true)} className="hover:underline">MyPage</button>
-				<button onClick={() => setIsFriendModal(true)} className="hover:underline">Friend</button>
+		<header className="fixed top-0 w-full flex items-center justify-between bg-black/70  h-24">
+			<img src={HeaderLogo} alt="Header Logo" onClick={handleMainButton} className="cursor-pointer w-80 ml-0" />
+			<nav className="space-x-4 flex flex-row mr-3">
+				<img src={InvitationIcon} className='w-10 mr-3'/>
+        <img src={BuddyIcon} onClick={() => setIsFriendModal(true)} className='w-10'/>
+        <img src={MenuIcon} onClick={() => setIsMypageModal(true)} className='w-10'/>
 			</nav>
       <MypageModal isOpen={isMypageModal} onClose={() => setIsMypageModal(false)} />
       <FriendModal isOpen={isFriendModal} onClose={() => setIsFriendModal(false)} />
