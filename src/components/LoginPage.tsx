@@ -6,8 +6,6 @@ import Logo from '../assets/logo.svg';
 import LoginButton from '../assets/button/login_button.svg'
 import IsLoggedIn from './IsLoggedIn';
 
-const API_BASE = "https://back-coffeego.com"
-
 const LoginPage = () => {
 	const navigate = useNavigate()
 	useEffect(() => {
@@ -24,7 +22,7 @@ const LoginPage = () => {
 					className="w-[50vw] max-w-[1000px] h-auto object-contain mt-[25vh]"
 					alt="logo" />
 					<GoogleOAuthProvider
-						clientId="638924682010-jhcf91jmst7nvq9ks9080gnvmqs4lpj8.apps.googleusercontent.com">
+						clientId={import.meta.env.VITE_CLIENT_ID}>
 							<Login />
 					</GoogleOAuthProvider>
 				</div>
@@ -37,7 +35,7 @@ const Login = () => {
 	const navigate = useNavigate()
 
 	const handleSuccess = (response: TokenResponse) => {
-		fetch(`${API_BASE}/ft/api/auth/login/google`, {
+		fetch(`${import.meta.env.VITE_API_BASE}/ft/api/auth/login/google`, {
 			method: "POST",
 			headers: { "content-Type": "application/json" },
 			body: JSON.stringify({ googleAccessToken: response.access_token }),

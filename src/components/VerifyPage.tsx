@@ -2,8 +2,6 @@ import { useNavigate } from 'react-router-dom'
 import BackGroundImage from './BackGroundImage'
 import { useState, useRef } from 'react'
 
-const API_BASE = "https://back-coffeego.com"
-
 const VerifyPage = () => {
 	const navigate = useNavigate()
 	const [otpCode, setOtpCode] = useState<string>("")
@@ -95,7 +93,7 @@ const verifyOTP = (otpCode: string, navigate: ReturnType<typeof useNavigate>) =>
 		navigate("/lobby")
 	}
 
-	fetch(`${API_BASE}/ft/api/auth/2fa/verify`, {
+	fetch(`${import.meta.env.VITE_API_BASE}/ft/api/auth/2fa/verify`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify({ token: otpCode, secret }),
