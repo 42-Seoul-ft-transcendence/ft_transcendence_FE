@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import BackGroundImage from '../common/BackGroundImage'
+import BusicButton from '../common/BasicButton'
 import { useState, useRef } from 'react'
+import BasicButton from '../common/BasicButton'
 
 const VerifyPage = () => {
 	const navigate = useNavigate()
@@ -70,12 +72,11 @@ const VerifyPage = () => {
 						/>
 					))}
 				</div>
-				<button 
+				<BasicButton
 					onClick={handleVerify}
-					className="px-4 py-2 text-white bg-green-500 hover:bg-green-700 transition mt-4 rounded"
 				>
-					인증하기
-				</button>
+					verify
+				</BasicButton>
 			</BackGroundImage>
 		</>
 	)
