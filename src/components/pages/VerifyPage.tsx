@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import BackGroundImage from './BackGroundImage'
+import BackGroundImage from '../common/BackGroundImage'
 import { useState, useRef } from 'react'
 
 const VerifyPage = () => {
@@ -44,7 +44,7 @@ const VerifyPage = () => {
 
 	return (
 		<>
-			<BackGroundImage>
+			<BackGroundImage backgroundImageUrl='src/assets/background/background_main.png'>
 				<div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
 					{Array.from({ length }).map((_, i) => (
 						<input

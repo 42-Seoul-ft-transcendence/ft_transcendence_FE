@@ -1,16 +1,16 @@
 import './App.css'
 import './index.css'
-import './components/MainPage.tsx';
-import MainPage from './components/MainPage.tsx';
-import LoginPage from './components/LoginPage.tsx';
-import AuthenticatePage from './components/AuthenticatePage.tsx'
-import RegisterPage from './components/RegisterPage.tsx';
-import VerifyPage from './components/VerifyPage.tsx';
-import LobbyPage from './components/LobbyPage.tsx';
-import RoomListPage from './components/RoomListPage.tsx';
-import GamePage from './components/GamePage.tsx';
-import ProtectedRoute from './components/ProtectedRoute.tsx';
-import NotFoundPage from './components/NotFoundPage.tsx';
+import './components/pages/MainPage.tsx';
+import MainPage from './components/pages/MainPage.tsx';
+import LoginPage from './components/pages/LoginPage.tsx';
+import AuthenticatePage from './components/pages/AuthenticatePage.tsx'
+import RegisterPage from './components/pages/RegisterPage.tsx';
+import VerifyPage from './components/pages/VerifyPage.tsx';
+import LobbyPage from './components/pages/lobby/LobbyPage.tsx';
+import RoomListPage from './components/pages/RoomListPage.tsx';
+import GamePage from './components/pages/GamePage.tsx';
+import ProtectedRoute from './components/utils/ProtectedRoute.tsx';
+import NotFoundPage from './components/pages/NotFoundPage.tsx';
 
 import {Route, Routes, Navigate } from 'react-router-dom'
 

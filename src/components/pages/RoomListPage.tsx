@@ -1,6 +1,6 @@
-import BackGroundImage from './BackGroundImage'
+import BackGroundImage from '../common/BackGroundImage'
 import { useEffect, useState } from 'react'
-import Header from './Header'
+import Header from '../common/Header'
 
 interface GameRoom {
   id: string;
@@ -32,11 +32,11 @@ const RoomListPage = () => {
   }, [])
 
   if (loading) return <p>불러오는 중...</p>
-  // if (error) return <p>에러: {error}</p>
+  if (error) return <p>에러: {error}</p>
 
   return (
 		<>
-			<BackGroundImage>
+			<BackGroundImage backgroundImageUrl='src/assets/background/background_basic.png'>
 				<Header />
 				<ul className="space-y-2">
 					{rooms.map((room) => (

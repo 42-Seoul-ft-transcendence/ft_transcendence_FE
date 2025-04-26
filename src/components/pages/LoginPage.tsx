@@ -1,10 +1,10 @@
 import { GoogleOAuthProvider, TokenResponse, useGoogleLogin } from '@react-oauth/google';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import BackGroundImage from './BackGroundImage'
-import Logo from '../assets/logo.svg';
-import LoginButton from '../assets/button/login_button.svg'
-import IsLoggedIn from './IsLoggedIn';
+import BackGroundImage from '../common/BackGroundImage'
+import Logo from '../../assets/logo.svg';
+import LoginButton from '../../assets/button/login_button.svg'
+import IsLoggedIn from '../utils/IsLoggedIn';
 
 const LoginPage = () => {
 	const navigate = useNavigate()
@@ -15,7 +15,7 @@ const LoginPage = () => {
 
 	return (
 		<>
-			<BackGroundImage>
+			<BackGroundImage backgroundImageUrl='/src/assets/background.png'>
 				<div className="flex flex-col items-center justify-between h-full gap-[5vh]">
 					<img 
 					src={Logo}
