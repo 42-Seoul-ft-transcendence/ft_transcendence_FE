@@ -77,7 +77,7 @@ const RoomListPage = () => {
 						{rooms.map((room) => (
 							<li
 								key={room.id}
-								className="p-4 border rounded hover:bg-gray-100 cursor-pointer"
+								className="p-4 border rounded bg-green-500 hover:bg-green-700 cursor-pointer"
 								onClick={() => console.log(`${room.id} 참가 요청`)}
 							>
 								<strong>{room.name}</strong> – {room.participants.length}명 참여 중
