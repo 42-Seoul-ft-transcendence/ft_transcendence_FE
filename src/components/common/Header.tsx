@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import HeaderLogo from '../assets/header_logo.svg';
-import InvitationIcon from '../assets/icon/invitation.svg';
-import BuddyIcon from '../assets/icon/buddy.svg';
-import MenuIcon from '../assets/icon/menu.svg';
+import HeaderLogo from '../../assets/header_logo.svg';
+import InvitationIcon from '../../assets/icon/invitation.svg';
+import BuddyIcon from '../../assets/icon/buddy.svg';
+import MenuIcon from '../../assets/icon/menu.svg';
 import SideModal from '../modal/SideModal';
 import MypageContent from '../modal/MyPageContent';
 import BuddyContent from '../modal/BuddyContent';

@@ -1,4 +1,4 @@
-import BackGroundImage from './common/BackGroundImage';
+import BackGroundImage from '../common/BackGroundImage';
 import { useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { useNavigate } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const RegisterPage = () => {
 	return (
 		<>
-			<BackGroundImage>
+			<BackGroundImage backgroundImageUrl='src/assets//background/background_2fa.png'>
 				<OTPRegister />
 			</BackGroundImage>
 		</>

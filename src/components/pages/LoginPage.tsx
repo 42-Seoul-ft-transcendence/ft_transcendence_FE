@@ -2,8 +2,8 @@ import { GoogleOAuthProvider, TokenResponse, useGoogleLogin } from '@react-oauth
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BackGroundImage from '../common/BackGroundImage'
-import Logo from '../assets/logo.svg';
-import LoginButton from '../assets/button/login_button.svg'
+import Logo from '../../assets/logo.svg';
+import LoginButton from '../../assets/button/login_button.svg'
 import IsLoggedIn from '../utils/IsLoggedIn';
 
 const LoginPage = () => {

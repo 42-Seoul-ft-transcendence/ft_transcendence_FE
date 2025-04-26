@@ -1,10 +1,10 @@
-import BackGroundImage from './common/BackGroundImage'
+import BackGroundImage from '../common/BackGroundImage'
 
 
 const GamePage = () => {
 	return (
 		<>
-			<BackGroundImage>
+			<BackGroundImage backgroundImageUrl='src/assets/background_game.png'>
 				<h1>Game Page</h1>
 			</BackGroundImage>
 		</>
