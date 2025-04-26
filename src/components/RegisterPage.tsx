@@ -3,8 +3,6 @@ import { useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { useNavigate } from 'react-router-dom';
 
-const API_BASE = "https://back-coffeego.com"
-
 const RegisterPage = () => {
 	return (
 		<>
@@ -21,7 +19,7 @@ const OTPRegister = () => {
   useEffect(() => {
 		const accessToken = localStorage.getItem("accessToken")
 
-    fetch(`${API_BASE}/ft/api/auth/2fa/setup`, {
+    fetch(`${import.meta.env.VITE_API_BASE}/ft/api/auth/2fa/setup`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ accessToken }),

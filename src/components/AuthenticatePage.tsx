@@ -2,8 +2,6 @@ import { useNavigate } from 'react-router-dom'
 import BackGroundImage from './BackGroundImage'
 import { useState, useRef } from 'react'
 
-const API_BASE = "https://back-coffeego.com"
-
 const AuthenticatePage = () => {
 	const navigate = useNavigate()
 	const [otpCode, setOtpCode] = useState<string>("")
@@ -91,7 +89,7 @@ const authenticate = (otpCode: string, navigate: ReturnType<typeof useNavigate>)
 		return
 	}
 
-	fetch(`${API_BASE}/ft/api/auth/2fa/authenticate`, {
+	fetch(`${import.meta.env.VITE_API_BASE}/ft/api/auth/2fa/authenticate`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify({ userId, token: otpCode }),
