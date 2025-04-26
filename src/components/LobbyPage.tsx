@@ -11,7 +11,7 @@ const LobbyPage = () => {
 		<>
 			<BackGroundImage backgroundImageUrl='/src/assets/background_basic.png'>
 				<Header />
-					<div className="flex gap-[10vh]">
+					<div className="flex gap-[15vh] mb-5">
 						<CreateRoomButton />
 						<JoinRoomButton />
 					</div>
@@ -67,7 +67,7 @@ const CreateRoomButton = () => {
 		<div>
 			<button
 				onClick={() => setIsCreatingRoom(true)}
-				className="w-[25vw] max-w-[1000px] h-auto mb-[20vh]"
+				className="w-[25vw] max-w-[1000px] h-auto"
 			>
 				<img src={CreateRoom} alt="createRoomButton" className="w-full h-full object-contain" />
 			</button>
@@ -123,7 +123,7 @@ const JoinRoomButton = () => {
 		<div>
 			<button
 				onClick={() => handleJoinRoom()}
-				className="w-[25vw] max-w-[1000px] h-auto mb-[20vh]"
+				className="w-[25vw] max-w-[1000px] h-auto"
 			>
 				<img src={JoinRoom} alt="JoinRoomButton" className="w-full h-full object-contain" />
 			</button>
