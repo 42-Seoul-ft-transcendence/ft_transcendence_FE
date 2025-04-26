@@ -2,7 +2,7 @@ const IsLoggedIn = (): boolean => {
 	if (localStorage.getItem("accessToken"))
 		return true
 	else
-		return true
+		return false
 }
 
 export default IsLoggedIn
