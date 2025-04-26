@@ -10,7 +10,7 @@ function BasicButton({ onClick, children, className = '' }: Props) {
   return (
     <button
       onClick={onClick}
-      className={`bg-[#444242] text-white px-4 py-2 rounded ${className}`}
+      className={`bg-[#444242] text-white text-center text-4xl border-solid border-[5px] border-black w-60 h-16 m-10 ${className}`}
     >
       {children}
     </button>
