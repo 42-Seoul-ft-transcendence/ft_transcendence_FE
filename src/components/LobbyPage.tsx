@@ -9,7 +9,7 @@ import Header from './Header'
 const LobbyPage = () => {
 	return (
 		<>
-			<BackGroundImage>
+			<BackGroundImage backgroundImageUrl='/src/assets/background_basic.png'>
 				<Header />
 					<div className="flex gap-[10vh]">
 						<CreateRoomButton />

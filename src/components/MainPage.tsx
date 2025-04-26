@@ -5,7 +5,7 @@ import Logo from '../assets/logo.svg';
 
 function MainPage() {
   return (
-    <BackGroundImage>
+    <BackGroundImage backgroundImageUrl="/src/assets/background.png">
 				<div className="flex flex-col items-center justify-between h-full gap-[5vh]">
 					{/* <img src={BackGround} className="w-full h-full object-cover" alt="background" /> */}
 					<img 
