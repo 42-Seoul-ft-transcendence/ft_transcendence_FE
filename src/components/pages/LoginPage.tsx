@@ -10,7 +10,7 @@ const LoginPage = () => {
 	const navigate = useNavigate()
 	useEffect(() => {
 		if (IsLoggedIn())
-			navigate("/lobby")
+			navigate("/lobby", {replace: true})
 	},[navigate])
 
 	return (
