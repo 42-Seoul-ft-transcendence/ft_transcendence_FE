@@ -16,16 +16,33 @@ const Header = () => {
   const [isInvitationModal, setIsInvitationModal] = useState(false);
 
   const handleMainButton = () => {
-    navigate("/lobby");
+    navigate('/lobby');
   };
 
   return (
     <header className="fixed top-0 w-full flex items-center justify-between bg-black/70 h-24">
-      <img src={HeaderLogo} alt="Header Logo" onClick={handleMainButton} className="cursor-pointer w-80 ml-0" />
+      <img
+        src={HeaderLogo}
+        alt="Header Logo"
+        onClick={handleMainButton}
+        className="cursor-pointer w-80 ml-0"
+      />
       <nav className="space-x-4 flex flex-row mr-3">
-        <img src={InvitationIcon} onClick={() => setIsInvitationModal(true)} className="w-10 mr-3" />
-        <img src={BuddyIcon} onClick={() => setIsBuddyModal(true)} className="w-10" />
-        <img src={MenuIcon} onClick={() => setIsMypageModal(true)} className="w-10" />
+        <img
+          src={InvitationIcon}
+          onClick={() => setIsInvitationModal(true)}
+          className="w-10 mr-3 cursor-pointer"
+        />
+        <img
+          src={BuddyIcon}
+          onClick={() => setIsBuddyModal(true)}
+          className="w-10 cursor-pointer"
+        />
+        <img
+          src={MenuIcon}
+          onClick={() => setIsMypageModal(true)}
+          className="w-10 cursor-pointer"
+        />
       </nav>
 
       <SideModal isOpen={isInvitationModal} onClose={() => setIsInvitationModal(false)}>

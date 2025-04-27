@@ -24,15 +24,12 @@ const SideModal = ({ isOpen, onClose, children }: SideModalProps) => {
     >
       <div
         ref={modalRef}
-        className={`absolute right-0 top-0 h-full w-80 bg-black/90 shadow-xl z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`absolute right-0 top-0 h-full w-[500px] bg-black/90 shadow-xl z-50 transform transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         onClick={(e) => e.stopPropagation()}
       >
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-black"
-        >
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-black">
           닫기
         </button>
         <div className="p-6">{children}</div>
