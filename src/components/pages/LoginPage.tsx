@@ -15,7 +15,7 @@ const LoginPage = () => {
 
 	return (
 		<>
-			<BackGroundImage backgroundImageUrl='/src/assets/background.png'>
+			<BackGroundImage backgroundImageUrl='/src/assets/background/background_main.png'>
 				<div className="flex flex-col items-center justify-between h-full gap-[5vh]">
 					<img 
 					src={Logo}
