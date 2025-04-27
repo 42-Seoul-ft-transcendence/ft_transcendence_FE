@@ -7,7 +7,7 @@ import AuthenticatePage from './components/pages/AuthenticatePage.tsx'
 import RegisterPage from './components/pages/RegisterPage.tsx';
 import VerifyPage from './components/pages/VerifyPage.tsx';
 import LobbyPage from './components/pages/lobby/LobbyPage.tsx';
-import RoomListPage from './components/pages/RoomListPage.tsx';
+import RoomListPage from './components/pages/rooms/RoomListPage.tsx';
 import GamePage from './components/pages/GamePage.tsx';
 import ProtectedRoute from './components/utils/ProtectedRoute.tsx';
 import NotFoundPage from './components/pages/NotFoundPage.tsx';

@@ -9,7 +9,6 @@ async function fetchWithAuth(input: RequestInfo, init?: RequestInit): Promise<Re
     headers: {
       ...(init?.headers || {}),
       Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      "Content-Type": "application/json",
     }
   }
 
