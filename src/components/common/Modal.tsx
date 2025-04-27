@@ -1,29 +1,41 @@
+import ModalBackGround from '../../assets/modal.svg';
+
 type ModalProps = {
-	isOpen: boolean
-	onClose: () => void
-	className?: string
-	children: React.ReactNode
-}
-  
-export function Modal({ isOpen, onClose, className="", children }: ModalProps) {
-	if (!isOpen) return null // 모달이 닫혀 있으면 렌더링 안 함
-  
-	return (
-		<div 
-			className={"fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"}
-		>
-			{/* 모달 박스 */}
-			<div className={`bg-white p-6 rounded-lg shadow-lg w-96 ${className}`}>
-		  	{children}
-		  	<button
-					onClick={onClose} 
-					className="px-4 py-2 text-white bg-gray-300 hover:bg-gray-500 transition mt-4 rounded"
-				>
-					닫기
-				</button>
-			</div>
-	  </div>
-	)
+  isOpen: boolean;
+  onClose: () => void;
+  className?: string;
+  children: React.ReactNode;
+};
+
+export function Modal({ isOpen, onClose, className = '', children }: ModalProps) {
+  if (!isOpen) return null;
+
+  // 배경 클릭 시 닫히게 처리
+  const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
+  return (
+    <div
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+      onClick={handleBackgroundClick} // 배경 클릭시만 닫기
+    >
+      {/* 모달 박스 */}
+      <div className={`relative flex flex-col items-center justify-center shadow-lg ${className}`}>
+        {/* 모달 백그라운드 이미지 */}
+        <img
+          src={ModalBackGround}
+          alt="Modal Background"
+          className="absolute inset-0 w-full h-full object-cover rounded-lg pointer-events-none"
+        />
+
+        {/* 위에 얹히는 내용 */}
+        <div className="relative w-full flex flex-col items-center gap-4 z-10">{children}</div>
+      </div>
+    </div>
+  );
 }
 
-export default Modal
+export default Modal;
