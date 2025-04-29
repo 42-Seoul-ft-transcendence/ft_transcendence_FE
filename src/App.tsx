@@ -26,6 +26,7 @@ function App() {
       <Route path="/verify" element={<ProtectedRoute><VerifyPage /></ProtectedRoute>} />
       <Route path="/lobby" element={<ProtectedRoute><LobbyPage /></ProtectedRoute>} />
       <Route path="/rooms" element={<ProtectedRoute><RoomListPage /></ProtectedRoute>} />
+      <Route path="/room/:roomid" element={<ProtectedRoute><RoomListPage /></ProtectedRoute>} />
       <Route path="/game/:gameid" element={<ProtectedRoute><GamePage /></ProtectedRoute>} />
       <Route path="/*" element={<NotFoundPage />} />
     </Routes>
