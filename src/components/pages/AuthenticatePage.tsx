@@ -6,14 +6,14 @@ const AuthenticatePage = () => {
 	const navigate = useNavigate()
 	const [otpCode, setOtpCode] = useState<string>("")
 
-	const inputsRef = useRef<Array<HTMLInputElement | null>>([])
+	const inputsRef = useRef<Array<HTMLInputElement>>([])
 	const length = 6
 
   const handleChange = (index: number, value: string) => {
     if (!/^\d?$/.test(value)) return
 
     const inputs = inputsRef.current
-    inputs[index]!.value = value
+    inputs[index].value = value
 
     if (value && index < length - 1) {
       inputs[index + 1]?.focus()
@@ -52,7 +52,7 @@ const AuthenticatePage = () => {
 							type="text"
 							inputMode="numeric"
 							maxLength={1}
-							ref={el => { inputsRef.current[i] = el }}
+							ref={(el: HTMLInputElement) => { inputsRef.current[i] = el }}
 							onChange={e => handleChange(i, e.target.value)}
 							onKeyDown={e => handleKeyDown(e, i)}
 							onInput={e => {

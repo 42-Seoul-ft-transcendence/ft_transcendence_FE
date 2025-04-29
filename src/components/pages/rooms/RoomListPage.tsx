@@ -1,8 +1,10 @@
-import BackGroundImage from '../common/BackGroundImage'
+import BackGroundImage from '../../common/BackGroundImage'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Header from '../common/Header'
-import fetchWithAuth from '../utils/fetchWithAuth'
+import Header from '../../common/Header'
+import fetchWithAuth from '../../utils/fetchWithAuth'
+import joinRoom from './joinRoom'
+import RoomModal from './RoomModal'
 
 interface participants {
 	id: number
@@ -19,7 +21,9 @@ interface tournaments {
 
 const RoomListPage = () => {
   const [rooms, setRooms] = useState<tournaments[]>([])
+	const [roomId, setRoomId] = useState<number>(-1)
   const [loading, setLoading] = useState(true)
+	const [isWating, setIsWating] = useState(false)
 	const [pageNumber, setPageNumber] = useState<number>(0)
 	const [playerNumber, setPlayerNumber] = useState<number>(2)
 
@@ -36,13 +40,14 @@ const RoomListPage = () => {
 		.then((data) => {
 			setRooms(data.tournaments)
 			totalPage = data.totalPage
+			console.log("total room number: " + data.total)
 		})
 		.finally(() => setLoading(false))
 		.catch(() => {
 			alert("게임방을 불러오지 못했습니다.")
 			navigate("/lobby")
 		})
-  }, [pageNumber, playerNumber])
+  }, [pageNumber, playerNumber, loading])
 
 	const handlePrev = () => {
 		if (pageNumber > 0)
@@ -52,6 +57,17 @@ const RoomListPage = () => {
 	const handleNext = () => {
 		if (pageNumber < totalPage)
 			setPageNumber(prev => prev + 1)
+	}
+
+	const handleJoinRoom = async (roomId: number) => {
+		const result = await joinRoom(roomId)
+		if (result) {
+			setRoomId(roomId)
+			setIsWating(true)
+		}
+		else {
+			setLoading(true)
+		}
 	}
 
   return (
@@ -72,13 +88,14 @@ const RoomListPage = () => {
             4P
           </button>
         </div>
+				{isWating && <RoomModal isOpen={isWating} onClose={() => setIsWating(false)} roomId={roomId} />}
 				{ loading ? (<p>불러오는 중...</p>) : (
 					<ul className="space-y-2">
 						{rooms.map((room) => (
 							<li
 								key={room.id}
 								className="p-4 border rounded bg-green-500 hover:bg-green-700 cursor-pointer"
-								onClick={() => console.log(`${room.id} 참가 요청`)}
+								onClick={() => handleJoinRoom(room.id)}
 							>
 								<strong>{room.name}</strong> – {room.participants.length}명 참여 중
 							</li>

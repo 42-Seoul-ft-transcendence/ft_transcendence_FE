@@ -4,15 +4,16 @@ type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
   className?: string;
+  backgroundClick?: boolean
   children: React.ReactNode;
 };
 
-export function Modal({ isOpen, onClose, className = '', children }: ModalProps) {
+export function Modal({ isOpen, onClose, className = '', backgroundClick = true, children }: ModalProps) {
   if (!isOpen) return null;
 
   // 배경 클릭 시 닫히게 처리
   const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
+    if (backgroundClick && e.target === e.currentTarget) {
       onClose();
     }
   };
