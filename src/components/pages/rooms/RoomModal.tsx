@@ -26,7 +26,6 @@ function RoomModal({ isOpen, onClose, roomId }: ModalProps) {
 	if (!isOpen) return null // 모달이 닫혀 있으면 렌더링 안 함
   
 	const	[participants, setParticipants] = useState<participants[]>([])
-	const [roomTitle, setRoomTitle] = useState<string>("")
 	const [roomType, setRoomType] = useState<string>("2P")
 	const	[inRoom, setInRoom] = useState<boolean>(false)
 	const navigate = useNavigate()
@@ -40,7 +39,6 @@ function RoomModal({ isOpen, onClose, roomId }: ModalProps) {
 			}
 
 			const data = await res.json()
-			setRoomTitle(data.name)
 			setRoomType(data.type)
 			setParticipants(data.participants)
 		} catch (error) {
@@ -65,12 +63,19 @@ function RoomModal({ isOpen, onClose, roomId }: ModalProps) {
 		fetchWithAuth(`${import.meta.env.VITE_API_BASE}/ft/api/tournaments/${roomId}/join`, {
 			method: "DELETE"})
 		.then((res) => {
-			if (!res.ok) throw new Error()
-			return
+			if (!res.ok) {
+				return res.json().then(errorData => {
+					throw new Error(errorData.message)
+				})
+			}
 		})
-		.catch(() => {
-			alert("오류가 발생했습니다.")
+		.catch((error) => {
+			if (error instanceof Error) {
+				alert(error.message)
+			}
+			else alert("오류가 발생했습니다.")
 			navigate("/lobby")
+			return
 		})
 		.finally(() => onClose())
 	}
@@ -94,16 +99,26 @@ const PlayerProfile = ({player1 = null, player2 = null}: Props) => {
 	return (
 		<div className="flex justify-center gap-[4vh]">
 			<div className="relative flex items-center justify-center flex-col">
-				<img
-					className="flex justify-center w-1/3"
-					src={BlackProfile} />
+				<div className="relative w-1/3">
+					<img
+						className="size-full"
+						src={BlackProfile} />
+					{player1 && <img
+						className="absolute inset-0 size-full rounded-full object-cover overflow-hidden"
+						src={player1.image} />}
+				</div>
 				<p className="text-white text-center text-2xl">{player1 ? player1.name : "???"}</p>
 			</div>
 			<p className="relative flex items-center justify-center text-2xl pb-3">VS</p>
 			<div className="relative flex items-center justify-center flex-col">
-				<img
-					className="flex justify-center w-1/3"
-					src={BlackProfile} />
+				<div className="relative w-1/3">
+					<img
+						className="size-full"
+						src={BlackProfile} />
+					{player2 && <img
+						className="absolute inset-0 size-full rounded-full object-cover overflow-hidden"
+						src={player2.image} />}
+					</div>
 				<p className="text-white text-center text-2xl">{player2 ? player2.name : "???"}</p>
 			</div>
 		</div>

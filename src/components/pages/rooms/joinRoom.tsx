@@ -21,6 +21,8 @@ async function joinRoom(roomId: number): Promise<boolean> {
 
 		if (!res.ok) {
 			const errorData = await res.json()
+			if (errorData.errorCode === "TOURNAMENT_006")
+				return true
 			throw new Error(errorData.message)
 		}
 		return true

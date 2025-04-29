@@ -1,6 +1,6 @@
 import BackGroundImage from '../../common/BackGroundImage'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Header from '../../common/Header'
 import fetchWithAuth from '../../utils/fetchWithAuth'
 import joinRoom from './joinRoom'
@@ -26,7 +26,6 @@ interface tournaments {
 
 const RoomListPage = () => {
   const [rooms, setRooms] = useState<tournaments[]>([])
-	const [roomId, setRoomId] = useState<number>(-1)
   const [loading, setLoading] = useState(true)
 	const [isWating, setIsWating] = useState(false)
 	const [pageNumber, setPageNumber] = useState<number>(0)
@@ -34,6 +33,19 @@ const RoomListPage = () => {
 	const [totalPage, setTotalPage] = useState<number>(1)
 
 	const navigate = useNavigate()
+	const { roomid } = useParams<{ roomid?: string }>()
+
+	useEffect(() => {
+		if (roomid) {
+			if (isNaN(+roomid)) {
+				alert("잘못된 접근입니다.")
+				navigate("/lobby", { replace: true })
+				return
+			}
+			else setIsWating(true)
+		}
+		else setIsWating(false)
+	}, [roomid, navigate])
 
   useEffect(() => {
 		fetchWithAuth(`${import.meta.env.VITE_API_BASE}/ft/api/tournaments?page=${pageNumber}&limit=5&type=${playerNumber}P`)
@@ -45,19 +57,18 @@ const RoomListPage = () => {
 		.then((data) => {
 			setRooms(data.tournaments)
 			setTotalPage(data.totalPages)
-			console.log("total page number: " + data.totalPages)
-			console.log("total room number: " + data.total)
 		})
-		.finally(() => setLoading(false))
 		.catch(() => {
 			alert("게임방을 불러오지 못했습니다.")
 			navigate("/lobby")
+			return
 		})
-  }, [pageNumber, playerNumber, loading])
+		.finally(() => setLoading(false))
+  }, [pageNumber, playerNumber])
 
 	const handleChangeMode = (mode: number) => {
 		setPlayerNumber(mode)
-		setPageNumber(1)
+		setPageNumber(0)
 	}
 
 	const handlePrev = () => {
@@ -66,37 +77,37 @@ const RoomListPage = () => {
 	}
 
 	const handleNext = () => {
-		if (pageNumber - 1 < totalPage)
+		if (pageNumber < totalPage - 1)
 			setPageNumber(prev => prev + 1)
 	}
 
 	const handleJoinRoom = async (roomId: number) => {
 		const result = await joinRoom(roomId)
 		if (result) {
-			setRoomId(roomId)
-			setIsWating(true)
+			navigate(`/room/${roomId}`)
+			return
 		}
 		else {
-			setLoading(true)
+			handleChangeMode(playerNumber)
 		}
 	}
 
   return (
 		<>
-			<BackGroundImage backgroundImageUrl='src/assets/background/background_basic.png'>
+			<BackGroundImage backgroundImageUrl='/src/assets/background/background_basic.png'>
 				<Header />
 				<div className="flex flex-col gap-[2vh] items-center justify-center pt-24">
 					<div className="flex w-24 gap-[2vh] justify-center mt-4">
 						<img
-							src={playerNumber == 2 ? Button2pActive : Button2pDefault}
-							className={"prounded-lg cursor-pointer transition-transform hover:scale-105"}
+							src={playerNumber === 2 ? Button2pActive : Button2pDefault}
+							className={`${playerNumber == 2 ? "" : "cursor-pointer transition-transform hover:scale-105"}`}
 							onClick={() => handleChangeMode(2)} />
 						<img
-							src={playerNumber == 4 ? Button4pActive : Button4pDefault}
-							className={"rounded-lg cursor-pointer transition-transform hover:scale-105"}
+							src={playerNumber === 4 ? Button4pActive : Button4pDefault}
+							className={`${playerNumber == 4 ? "" : "cursor-pointer transition-transform hover:scale-105"}`}
 							onClick={() => handleChangeMode(4)} />
 					</div>
-					{isWating && <RoomModal isOpen={isWating} onClose={() => setIsWating(false)} roomId={roomId} />}
+					{isWating && <RoomModal isOpen={isWating} onClose={() => navigate("/rooms")} roomId={+roomid!} />}
 					{ loading ? (<p>불러오는 중...</p>) : (
 						<ul className="space-y-2">
 							{rooms.map((room) => (
@@ -131,7 +142,7 @@ const RoomListPage = () => {
 								border-t-8 border-b-8 border-r-8 
 								border-t-transparent border-b-transparent border-r-black"
 							onClick={handlePrev} />
-						<p>{pageNumber} / {totalPage == 0 ? 1 : totalPage}</p>
+						<p>{pageNumber + 1} / {totalPage == 0 ? 1 : totalPage}</p>
 						<button 
 							className="w-0 h-0 ml-4
 								border-t-8 border-b-8 border-l-8 
