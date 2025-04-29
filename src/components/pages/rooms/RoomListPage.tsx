@@ -5,6 +5,11 @@ import Header from '../../common/Header'
 import fetchWithAuth from '../../utils/fetchWithAuth'
 import joinRoom from './joinRoom'
 import RoomModal from './RoomModal'
+import JoinButton from '../../../assets/button/join_button.svg'
+import Button2pDefault from '../../../assets/button/2p_yellow.svg';
+import Button4pDefault from '../../../assets/button/4p_yellow.svg';
+import Button2pActive from '../../../assets/button/2p_orange.svg';
+import Button4pActive from '../../../assets/button/4p_orange.svg';
 
 interface participants {
 	id: number
@@ -26,12 +31,12 @@ const RoomListPage = () => {
 	const [isWating, setIsWating] = useState(false)
 	const [pageNumber, setPageNumber] = useState<number>(0)
 	const [playerNumber, setPlayerNumber] = useState<number>(2)
+	const [totalPage, setTotalPage] = useState<number>(1)
 
 	const navigate = useNavigate()
-	let		totalPage = 0
 
   useEffect(() => {
-		fetchWithAuth(`${import.meta.env.VITE_API_BASE}/ft/api/tournaments?page=${pageNumber}&limit=20&type=${playerNumber}P`)
+		fetchWithAuth(`${import.meta.env.VITE_API_BASE}/ft/api/tournaments?page=${pageNumber}&limit=5&type=${playerNumber}P`)
 		.then((res) => {
 			if (!res.ok)
 				throw new Error()
@@ -39,7 +44,8 @@ const RoomListPage = () => {
 		})
 		.then((data) => {
 			setRooms(data.tournaments)
-			totalPage = data.totalPage
+			setTotalPage(data.totalPages)
+			console.log("total page number: " + data.totalPages)
 			console.log("total room number: " + data.total)
 		})
 		.finally(() => setLoading(false))
@@ -49,13 +55,18 @@ const RoomListPage = () => {
 		})
   }, [pageNumber, playerNumber, loading])
 
+	const handleChangeMode = (mode: number) => {
+		setPlayerNumber(mode)
+		setPageNumber(1)
+	}
+
 	const handlePrev = () => {
 		if (pageNumber > 0)
 			setPageNumber(prev => prev - 1)
 	}
 
 	const handleNext = () => {
-		if (pageNumber < totalPage)
+		if (pageNumber - 1 < totalPage)
 			setPageNumber(prev => prev + 1)
 	}
 
@@ -74,46 +85,59 @@ const RoomListPage = () => {
 		<>
 			<BackGroundImage backgroundImageUrl='src/assets/background/background_basic.png'>
 				<Header />
-				<div className="flex gap-[2vh] mb-5">
-          <button
-            className={`px-4 py-2 rounded-lg ${playerNumber == 2 ? "bg-blue-500 text-white" : "bg-gray-300 text-black"}`}
-            onClick={() => setPlayerNumber(2)}
-          >
-            2P
-          </button>
-          <button
-            className={`px-4 py-2 rounded-lg ${playerNumber == 4 ? "bg-blue-500 text-white" : "bg-gray-300 text-black"}`}
-            onClick={() => setPlayerNumber(4)}
-          >
-            4P
-          </button>
-        </div>
-				{isWating && <RoomModal isOpen={isWating} onClose={() => setIsWating(false)} roomId={roomId} />}
-				{ loading ? (<p>불러오는 중...</p>) : (
-					<ul className="space-y-2">
-						{rooms.map((room) => (
-							<li
-								key={room.id}
-								className="p-4 border rounded bg-green-500 hover:bg-green-700 cursor-pointer"
-								onClick={() => handleJoinRoom(room.id)}
-							>
-								<strong>{room.name}</strong> – {room.participants.length}명 참여 중
-							</li>
-						))}
-					</ul>
-				)}
-				<div className="flex mt-6">
-					<button 
-						className="w-0 h-0 mr-4
-            	border-t-8 border-b-8 border-r-8 
-            	border-t-transparent border-b-transparent border-r-black"
-						onClick={handlePrev} />
-					<p>{pageNumber + 1} / {totalPage + 1}</p>
-					<button 
-						className="w-0 h-0 ml-4
-            	border-t-8 border-b-8 border-l-8 
-            	border-t-transparent border-b-transparent border-l-black"
-						onClick={handleNext} />
+				<div className="flex flex-col gap-[2vh] items-center justify-center pt-24">
+					<div className="flex w-24 gap-[2vh] justify-center mt-4">
+						<img
+							src={playerNumber == 2 ? Button2pActive : Button2pDefault}
+							className={"prounded-lg cursor-pointer transition-transform hover:scale-105"}
+							onClick={() => handleChangeMode(2)} />
+						<img
+							src={playerNumber == 4 ? Button4pActive : Button4pDefault}
+							className={"rounded-lg cursor-pointer transition-transform hover:scale-105"}
+							onClick={() => handleChangeMode(4)} />
+					</div>
+					{isWating && <RoomModal isOpen={isWating} onClose={() => setIsWating(false)} roomId={roomId} />}
+					{ loading ? (<p>불러오는 중...</p>) : (
+						<ul className="space-y-2">
+							{rooms.map((room) => (
+								<li
+									key={room.id}
+									className="flex items-center w-[800px] h-24 border rounded bg-[#D9FBF6]"
+								>
+									<strong className="text-3xl text-left w-[500px] whitespace-normal break-words text-gray-600 pl-4">
+										{room.name}
+									</strong>
+									<div className="text-2xl relative flex ml-auto">
+										<div className="flex p-4">
+											<p className="text-gray-500">
+												{room.participants.length}&nbsp;
+											</p>
+											<p>
+												/&nbsp;{playerNumber}
+											</p>
+										</div>
+										<img 
+											src={JoinButton}
+											className="flex justify-center w-20 mr-2 cursor-pointer transition-transform hover:scale-105"
+											onClick={() => handleJoinRoom(room.id)} />
+									</div>
+								</li>
+							))}
+						</ul>
+					)}
+					<div className="flex mt-2">
+						<button 
+							className="w-0 h-0 mr-4
+								border-t-8 border-b-8 border-r-8 
+								border-t-transparent border-b-transparent border-r-black"
+							onClick={handlePrev} />
+						<p>{pageNumber} / {totalPage == 0 ? 1 : totalPage}</p>
+						<button 
+							className="w-0 h-0 ml-4
+								border-t-8 border-b-8 border-l-8 
+								border-t-transparent border-b-transparent border-l-black"
+							onClick={handleNext} />
+					</div>
 				</div>
 			</BackGroundImage>
 		</>
