@@ -59,6 +59,8 @@ async function tryRefreshToken(): Promise<boolean> {
     })
 
     if (!res.ok){
+      localStorage.removeItem("accessToken")
+      localStorage.removeItem("refreshToken")
       alert("로그인 세션이 만료되었습니다.")
 		  navigate("/")
     }
