@@ -29,7 +29,10 @@ const SideModal = ({ isOpen, onClose, children }: SideModalProps) => {
         }`}
         onClick={(e) => e.stopPropagation()}
       >
-        <button onClick={onClose} className="absolute top-4 right-4 text-white hover:text-black">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-[#858585] hover:text-black"
+        >
           X
         </button>
         <div className="p-6">{children}</div>

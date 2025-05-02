@@ -1,4 +1,4 @@
-import { MatchesResponse } from '../components/modal/MyPageContent';
+import { MatchesResponse } from '../types/MyMatch';
 
 export const mockMatches: MatchesResponse = {
   matches: Array.from({ length: 18 }, (_, i) => ({
