@@ -4,7 +4,6 @@ import { BuddyListResponse, Buddy } from '../../types/Buddy';
 import fetchWithAuth from '../utils/fetchWithAuth';
 import Placeholder from '../../assets/black_profile.svg';
 import DeleteButton from '../../assets/button/delete_button.svg';
-// import { mockBuddyList } from '../../mocks/buddies';
 import DeleteModal from '../common/Modal';
 import Button from '../common/BasicButton';
 
@@ -49,12 +48,7 @@ const BuddyContent = () => {
           method: 'GET',
         });
 
-        console.log('📡 fetch status:', res.status);
         const data: BuddyListResponse = await res.json();
-        console.log('📦 받은 데이터:', data);
-
-        // // mock 데이터
-        // setBuddies(mockBuddyList.friends);
         setBuddies(data.friends);
       } catch (err: unknown) {
         console.log('❌ 데이터 가져오기 실패', err);
@@ -68,7 +62,6 @@ const BuddyContent = () => {
 
   if (loading) return <div>로딩 중...</div>;
   if (error) return <div>에러 발생: {error}</div>;
-  if (!buddies.length) return <div>친구가 없습니다.</div>;
 
   return (
     <div>
@@ -84,56 +77,61 @@ const BuddyContent = () => {
 
       <hr className="w-full h-[3px] mt-8 bg-[#2c2c2c] border-none" />
 
-      {/* 친구 목록 출력 */}
+      {/* 친구 목록 */}
       <div className="mt-6 space-y-4">
-        {buddies.map((buddy) => (
-          <div
-            key={buddy.id}
-            className="flex items-center justify-between text-white bg-[#1f1f1f] px-4 py-2 rounded-lg"
-          >
-            {/* 왼쪽: 프로필 이미지 + 이름 + 상태 */}
-            <div className="flex items-center gap-4">
-              <img
-                src={buddy.image || Placeholder}
-                alt={buddy.name}
-                className="w-12 h-12 rounded-full object-cover"
-              />
-              <div className="flex flex-col">
-                <span className="text-2xl font-semibold">{buddy.name}</span>
-                <span className={`text-sm ${buddy.isOnline ? 'text-green-400' : 'text-gray-400'}`}>
-                  {buddy.isOnline
-                    ? 'Online'
-                    : `Offline · Last seen: ${new Date(buddy.lastSeen).toLocaleString('en-US', {
-                        weekday: 'short',
-                        year: 'numeric',
-                        month: 'short',
-                        day: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: true,
-                      })}`}
-                </span>
+        {buddies.length === 0 ? (
+          <div className="text-center text-white text-2xl mt-10">No buddies found.</div>
+        ) : (
+          buddies.map((buddy) => (
+            <div
+              key={buddy.id}
+              className="flex items-center justify-between text-white bg-[#1f1f1f] px-4 py-2 rounded-lg"
+            >
+              <div className="flex items-center gap-4">
+                <img
+                  src={buddy.image || Placeholder}
+                  alt={buddy.name}
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+                <div className="flex flex-col">
+                  <span className="text-2xl font-semibold">{buddy.name}</span>
+                  <span
+                    className={`text-sm ${buddy.isOnline ? 'text-green-400' : 'text-gray-400'}`}
+                  >
+                    {buddy.isOnline
+                      ? 'Online'
+                      : `Offline · Last seen: ${new Date(buddy.lastSeen).toLocaleString('en-US', {
+                          weekday: 'short',
+                          year: 'numeric',
+                          month: 'short',
+                          day: '2-digit',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          hour12: true,
+                        })}`}
+                  </span>
+                </div>
               </div>
-            </div>
 
-            {/* 오른쪽: 삭제 버튼 */}
-            <img
-              src={DeleteButton}
-              onClick={() => handleDeleteClick(buddy)}
-              className="w-16 h-16 cursor-pointer"
-              alt="Delete"
-            />
-          </div>
-        ))}
+              <img
+                src={DeleteButton}
+                onClick={() => handleDeleteClick(buddy)}
+                className="w-16 h-16 cursor-pointer"
+                alt="Delete"
+              />
+            </div>
+          ))
+        )}
       </div>
 
+      {/* 삭제 모달 */}
       <DeleteModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         className="w-[400px] h-[200px] p-6"
       >
         <div
-          className="text-white text-center text-3xl font-semibold mt-8 "
+          className="text-white text-center text-3xl font-semibold mt-8"
           style={{
             textShadow: '1px 1px 0 #000, -1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000',
           }}
@@ -148,7 +146,6 @@ const BuddyContent = () => {
               if (selectedBuddy) {
                 deleteBuddy(selectedBuddy.id);
               }
-              setIsModalOpen(false);
             }}
             className="bg-red-500 w-[80px] h-[40px] border-2 text-xl"
           >
@@ -158,7 +155,7 @@ const BuddyContent = () => {
             onClick={() => setIsModalOpen(false)}
             className="w-[80px] h-[40px] border-2 text-xl"
           >
-            cancle
+            Cancel
           </Button>
         </div>
       </DeleteModal>
