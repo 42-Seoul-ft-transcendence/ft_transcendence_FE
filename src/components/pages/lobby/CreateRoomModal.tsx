@@ -43,7 +43,6 @@ const CreateRoomModal = ({ isOpen, onClose }: Props) => {
         throw new Error(errorData.message)
       }
       const data = await res.json()
-      console.log("create room api")
       navigate(`/room/${data.id}`)
     } 
     catch (error) {

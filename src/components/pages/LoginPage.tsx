@@ -42,7 +42,6 @@ const Login = () => {
 		})
 		.then((res) => res.json())
 		.then((data) => {
-			console.log("google: ", response.access_token)
 			localStorage.setItem("userId", data.userId)
 			if (data.reauireTFA) {
 				navigate("/verify")
