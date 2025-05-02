@@ -6,7 +6,7 @@ import Placeholder from '../../assets/black_profile.svg';
 import DeleteButton from '../../assets/button/delete_button.svg';
 import DeleteModal from '../common/Modal';
 import Button from '../common/BasicButton';
-// import { mockBuddyList } from '../../mocks/buddies';
+import { mockBuddyList } from '../../mocks/buddies';
 
 const BuddyContent = () => {
   const [buddies, setBuddies] = useState<Buddy[]>([]);
@@ -50,8 +50,8 @@ const BuddyContent = () => {
         });
 
         const data: BuddyListResponse = await res.json();
-        setBuddies(data.friends);
-        // setBuddies(mockBuddyList.friends);
+        // setBuddies(data.friends);
+        setBuddies(mockBuddyList.friends);
       } catch (err: unknown) {
         console.log('❌ 데이터 가져오기 실패', err);
         setError(err instanceof Error ? err.message : '알 수 없는 에러');
@@ -130,10 +130,10 @@ const BuddyContent = () => {
       <DeleteModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        className="w-[400px] h-[200px] p-6"
+        className="w-[350px] h-[200px] p-6"
       >
         <div
-          className="text-white text-center text-3xl font-semibold mt-8"
+          className="text-white text-center text-3xl font-semibold mt-4"
           style={{
             textShadow: '1px 1px 0 #000, -1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000',
           }}
@@ -142,7 +142,7 @@ const BuddyContent = () => {
           <br />
           from your buddy list?
         </div>
-        <div className="flex justify-center gap-4 mt-4">
+        <div className="flex justify-center gap-4 mt-2">
           <Button
             onClick={() => {
               if (selectedBuddy) {
