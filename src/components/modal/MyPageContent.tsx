@@ -76,9 +76,10 @@ const MypageContent = () => {
         <div className="text-6xl text-white">{userInfo.name}</div>
         <img src={SettingIcon} />
       </div>
+      <hr className="w-full h-[3px] bg-[#2c2c2c] my-2 border-none" />
 
       {/* 매치 기록 */}
-      <div className="mt-8 w-full max-w-2xl">
+      <div className="mt-2 w-full max-w-2xl">
         <h2 className="text-center text-yellow-200 text-3xl font-bold mb-6">Match History</h2>
 
         <div className="grid grid-cols-4 text-gray-400 text-lg font-semibold border-b border-gray-600 pb-2 mb-4">
@@ -95,15 +96,15 @@ const MypageContent = () => {
               className="grid grid-cols-4 items-center border-b border-gray-600 pb-2"
             >
               <div
-                className={`text-left font-bold ${match.isWinner ? 'text-green-400' : 'text-red-400'}`}
+                className={`text-left font-bold text-xl ${match.isWinner ? 'text-green-400' : 'text-red-400'}`}
               >
                 {match.isWinner ? 'win' : 'lose'}
               </div>
-              <div className="text-center text-white font-mono text-lg">
+              <div className="text-center text-white text-xl">
                 {match.myScore}:{match.opponentScore}
               </div>
               <div className="text-center text-white">{match.opponentName}</div>
-              <div className="text-right text-white font-mono">
+              <div className="text-right text-white text-xl">
                 {new Date(match.playedAt).toLocaleDateString('en-US', {
                   month: '2-digit',
                   day: '2-digit',
@@ -121,7 +122,7 @@ const MypageContent = () => {
               onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
               className="px-3 py-1 rounded bg-gray-600 text-white disabled:opacity-50"
             >
-              이전
+              prev
             </button>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <button
@@ -141,7 +142,7 @@ const MypageContent = () => {
               onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
               className="px-3 py-1 rounded bg-gray-600 text-white disabled:opacity-50"
             >
-              다음
+              next
             </button>
           </div>
         )}
@@ -149,9 +150,9 @@ const MypageContent = () => {
 
       {/* 승패 */}
       <div className="flex flex-col justify-center items-center mt-8">
-        <h1 className="text-[#FFFBAA] text-3xl">Win/Lose Stats</h1>
-        <div className="text-lg text-white">win: {userInfo.wins}</div>
-        <div className="text-lg text-white">lose: {userInfo.losses}</div>
+        <h1 className="text-[#FFFBAA] text-3xl mb-4">Win/Lose Stats</h1>
+        <div className="text-3xl text-white mb-2">win {userInfo.wins}</div>
+        <div className="text-3xl text-white">lose {userInfo.losses}</div>
       </div>
     </div>
   );

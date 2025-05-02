@@ -29,8 +29,8 @@ const SideModal = ({ isOpen, onClose, children }: SideModalProps) => {
         }`}
         onClick={(e) => e.stopPropagation()}
       >
-        <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-black">
-          닫기
+        <button onClick={onClose} className="absolute top-4 right-4 text-white hover:text-black">
+          X
         </button>
         <div className="p-6">{children}</div>
       </div>
