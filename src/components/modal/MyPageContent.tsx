@@ -1,33 +1,9 @@
 import { useEffect, useState } from 'react';
-import fetchWithAuth from '../utils/fetchWithAuth';
+// import fetchWithAuth from '../utils/fetchWithAuth';
 import ProfilePlaceholder from '../../assets/black_profile.svg';
 import SettingIcon from '../../assets/icon/setting.svg';
 import { mockMatches } from '../../mocks/matches';
-
-type UserInfo = {
-  id: number;
-  name: string;
-  imgURL: string;
-  wins: number;
-  losses: number;
-};
-
-type MatchInfo = {
-  id: number;
-  myScore: number;
-  opponentScore: number;
-  isWinner: boolean;
-  opponentName: string;
-  playedAt: string; // 날짜 문자열
-};
-
-export type MatchesResponse = {
-  matches: MatchInfo[];
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
-};
+import { MatchInfo, MatchesResponse, UserInfo } from '../../types/MyMatch';
 
 const MypageContent = () => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
