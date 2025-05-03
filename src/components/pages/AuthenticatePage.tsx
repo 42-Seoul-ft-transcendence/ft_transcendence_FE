@@ -20,8 +20,6 @@ const AuthenticatePage = () => {
     }
 
     const code = inputs.map(input => input?.value).join('')
-		console.log("code: " + code)
-		console.log("length: " + code.length)
     if (code.length <= length) {
       setOtpCode(code)
     }

@@ -20,9 +20,7 @@ const VerifyPage = () => {
       inputs[index + 1]?.focus();
     }
 
-    const code = inputs.map((input) => input?.value).join('');
-    console.log('code: ' + code);
-    console.log('length: ' + code.length);
+    const code = inputs.map((input) => input?.value).join('')
     if (code.length <= length) {
       setOtpCode(code);
     }

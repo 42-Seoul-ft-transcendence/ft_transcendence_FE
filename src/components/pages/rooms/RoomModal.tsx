@@ -32,7 +32,7 @@ function RoomModal({ isOpen, onClose, roomId }: ModalProps) {
 
 	async function updateRoomInfo() {
 		try {
-			const res = await fetchWithAuth(`${import.meta.env.VITE_API_BASE}/ft/api/tournaments/${roomId}`)
+			const res = await fetchWithAuth(`${import.meta.env.VITE_API_BASE}/ft/api/tournaments/${roomId}`, navigate)
 			if (!res.ok) {
 				const errorData = await res.json()
 				throw new Error(errorData.message)
@@ -60,7 +60,7 @@ function RoomModal({ isOpen, onClose, roomId }: ModalProps) {
 
 	const handleExit = () => {
 		setInRoom(false)
-		fetchWithAuth(`${import.meta.env.VITE_API_BASE}/ft/api/tournaments/${roomId}/join`, {
+		fetchWithAuth(`${import.meta.env.VITE_API_BASE}/ft/api/tournaments/${roomId}/join`, navigate, {
 			method: "DELETE"})
 		.then((res) => {
 			if (!res.ok) {

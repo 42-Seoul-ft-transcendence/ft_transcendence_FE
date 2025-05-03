@@ -27,7 +27,7 @@ const RoomListPage = () => {
 	let		totalPage = 0
 
   useEffect(() => {
-		fetchWithAuth(`${import.meta.env.VITE_API_BASE}/ft/api/tournaments?page=${pageNumber}&limit=20&type=${playerNumber}P`)
+		fetchWithAuth(`${import.meta.env.VITE_API_BASE}/ft/api/tournaments?page=${pageNumber}&limit=20&type=${playerNumber}P`, navigate)
 		.then((res) => {
 			if (!res.ok)
 				throw new Error()

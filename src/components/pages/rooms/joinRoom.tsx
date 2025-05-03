@@ -6,17 +6,10 @@ interface participants {
 	image: string
 }
 
-interface tournaments {
-  id: number
-  name: string
-  type: string
-	participants: participants[]
-}
-
-async function joinRoom(roomId: number): Promise<boolean> {
+async function joinRoom(roomId: number, navigate: (path: string) => void): Promise<boolean> {
 	try {
 		const res = await fetchWithAuth(
-			`${import.meta.env.VITE_API_BASE}/ft/api/tournaments/${roomId}/join`, 
+			`${import.meta.env.VITE_API_BASE}/ft/api/tournaments/${roomId}/join`, navigate,
 			{method: "POST"})
 
 		if (!res.ok) {
