@@ -28,6 +28,7 @@ const MypageContent = () => {
         );
         const userData = await userResponse.json();
         setUserInfo(userData);
+        console.log(userData);
 
         const matchesResponse = await fetchWithAuth(
           `${import.meta.env.VITE_API_BASE}/ft/api/users/me/matches/history`,
@@ -60,7 +61,11 @@ const MypageContent = () => {
     <div className="flex flex-col items-center gap-4 p-6">
       {/* 유저 프로필 */}
       <div className="flex flex-row items-center gap-8">
-        <img src={ProfilePlaceholder} className="w-[100px] h-[100px]" />
+        <img
+          // src={userInfo.image ? userInfo.image : ProfilePlaceholder}
+          src="https://drive.google.com/uc?export=view&id=1Zl9TfYgLIS1OhmkzhbEEaYMvu8a5PJ8m"
+          className="w-[100px] h-[100px] rounded-full"
+        />
         <div className="text-5xl text-white">{userInfo.name}</div>
         <img
           src={SettingIcon}
