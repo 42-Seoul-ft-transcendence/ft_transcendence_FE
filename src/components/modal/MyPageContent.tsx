@@ -58,7 +58,7 @@ const MypageContent = () => {
       {/* 유저 프로필 */}
       <div className="flex flex-row items-center gap-8">
         <img src={ProfilePlaceholder} className="w-[100px] h-[100px]" />
-        <div className="text-6xl text-white">{userInfo.name}</div>
+        <div className="text-5xl text-white">{userInfo.name}</div>
         <img src={SettingIcon} />
       </div>
 
