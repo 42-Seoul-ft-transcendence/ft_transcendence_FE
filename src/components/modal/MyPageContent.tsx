@@ -4,6 +4,8 @@ import ProfilePlaceholder from '../../assets/black_profile.svg';
 import SettingIcon from '../../assets/icon/setting.svg';
 import { MatchInfo, MatchesResponse, UserInfo } from '../../types/MyMatch';
 import { useNavigate } from 'react-router-dom';
+import EditProfileContent from './EditProfileContent';
+import SideModal from './SideModal';
 // import { mockMatches } from '../../mocks/matches';
 
 const MypageContent = () => {
@@ -12,6 +14,7 @@ const MypageContent = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const matchesPerPage = 5;
   const navigate = useNavigate();
 
@@ -59,7 +62,7 @@ const MypageContent = () => {
       <div className="flex flex-row items-center gap-8">
         <img src={ProfilePlaceholder} className="w-[100px] h-[100px]" />
         <div className="text-5xl text-white">{userInfo.name}</div>
-        <img src={SettingIcon} />
+        <img src={SettingIcon} onClick={() => setIsEditModalOpen(true)} />
       </div>
 
       <hr className="w-full h-[3px] bg-[#2c2c2c] my-2 border-none" />
@@ -153,6 +156,15 @@ const MypageContent = () => {
           </div>
         </>
       )}
+
+      <SideModal
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+        }}
+      >
+        <EditProfileContent />
+      </SideModal>
     </div>
   );
 };
