@@ -64,18 +64,13 @@ function EditProfileContent() {
       // 이미지 업로드
       if (imageFile) {
         const formData = new FormData();
-        formData.append('image', imageFile);
-
-        // DEBUG: FormData 로그
-        console.log('[Upload] imageFile:', imageFile);
-        for (const pair of formData.entries()) {
-          console.log(pair[0], pair[1]);
-        }
+        formData.append('image', imageFile); // File 객체 그대로 전달
 
         const resImage = await fetch(`${import.meta.env.VITE_API_BASE}/ft/api/users/me/image`, {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            // Content-Type은 절대 설정하지 말 것! (자동으로 multipart/form-data + boundary가 붙음)
           },
           body: formData,
         });

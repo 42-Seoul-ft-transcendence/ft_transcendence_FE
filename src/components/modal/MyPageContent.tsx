@@ -62,7 +62,11 @@ const MypageContent = () => {
       <div className="flex flex-row items-center gap-8">
         <img src={ProfilePlaceholder} className="w-[100px] h-[100px]" />
         <div className="text-5xl text-white">{userInfo.name}</div>
-        <img src={SettingIcon} onClick={() => setIsEditModalOpen(true)} />
+        <img
+          src={SettingIcon}
+          onClick={() => setIsEditModalOpen(true)}
+          className="cursor-pointer"
+        />
       </div>
 
       <hr className="w-full h-[3px] bg-[#2c2c2c] my-2 border-none" />
