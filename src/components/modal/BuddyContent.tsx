@@ -6,7 +6,8 @@ import Placeholder from '../../assets/black_profile.svg';
 import DeleteButton from '../../assets/button/delete_button.svg';
 import DeleteModal from '../common/Modal';
 import Button from '../common/BasicButton';
-import { mockBuddyList } from '../../mocks/buddies';
+// import { mockBuddyList } from '../../mocks/buddies';
+import { useNavigate } from 'react-router-dom';
 
 const BuddyContent = () => {
   const [buddies, setBuddies] = useState<Buddy[]>([]);
@@ -14,6 +15,8 @@ const BuddyContent = () => {
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBuddy, setSelectedBuddy] = useState<Buddy | null>(null);
+
+  const navigate = useNavigate();
 
   const handleDeleteClick = (buddy: Buddy) => {
     setSelectedBuddy(buddy);
@@ -24,6 +27,7 @@ const BuddyContent = () => {
     try {
       const res = await fetchWithAuth(
         `${import.meta.env.VITE_API_BASE}/ft/api/friends/${buddyId}`,
+        navigate,
         {
           method: 'DELETE',
         },
@@ -45,13 +49,17 @@ const BuddyContent = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetchWithAuth(`${import.meta.env.VITE_API_BASE}/ft/api/friends`, {
-          method: 'GET',
-        });
+        const res = await fetchWithAuth(
+          `${import.meta.env.VITE_API_BASE}/ft/api/friends`,
+          navigate,
+          {
+            method: 'GET',
+          },
+        );
 
         const data: BuddyListResponse = await res.json();
-        // setBuddies(data.friends);
-        setBuddies(mockBuddyList.friends);
+        setBuddies(data.friends);
+        // setBuddies(mockBuddyList.friends);
       } catch (err: unknown) {
         console.log('❌ 데이터 가져오기 실패', err);
         setError(err instanceof Error ? err.message : '알 수 없는 에러');
