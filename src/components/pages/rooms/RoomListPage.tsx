@@ -6,23 +6,11 @@ import fetchWithAuth from '../../utils/fetchWithAuth'
 import joinRoom from './joinRoom'
 import RoomModal from './RoomModal'
 import JoinButton from '../../../assets/button/join_button.svg'
-import Button2pDefault from '../../../assets/button/2p_yellow.svg';
-import Button4pDefault from '../../../assets/button/4p_yellow.svg';
-import Button2pActive from '../../../assets/button/2p_orange.svg';
-import Button4pActive from '../../../assets/button/4p_orange.svg';
-
-interface participants {
-	id: number
-	name: string
-	image: string
-}
-
-interface tournaments {
-  id: number
-  name: string
-  type: string
-	participants: participants[]
-}
+import Button2pDefault from '../../../assets/button/2p_yellow.svg'
+import Button4pDefault from '../../../assets/button/4p_yellow.svg'
+import Button2pActive from '../../../assets/button/2p_orange.svg'
+import Button4pActive from '../../../assets/button/4p_orange.svg'
+import { tournaments } from '../../../types/Tournament'
 
 const RoomListPage = () => {
   const [rooms, setRooms] = useState<tournaments[]>([])

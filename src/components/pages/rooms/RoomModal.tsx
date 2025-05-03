@@ -4,12 +4,7 @@ import fetchWithAuth from '../../utils/fetchWithAuth'
 import BasicButton from '../../common/BasicButton'
 import Modal from '../../common/Modal'
 import BlackProfile from '../../../assets/black_profile.svg'
-
-interface participants {
-	id: number
-	name: string
-	image: string
-}
+import { participants } from '../../../types/Tournament'
 
 type ModalProps = {
 	isOpen: boolean
