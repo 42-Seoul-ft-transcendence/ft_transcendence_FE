@@ -10,10 +10,10 @@ import Button2pDefault from '../../../assets/button/2p_yellow.svg'
 import Button4pDefault from '../../../assets/button/4p_yellow.svg'
 import Button2pActive from '../../../assets/button/2p_orange.svg'
 import Button4pActive from '../../../assets/button/4p_orange.svg'
-import { tournaments } from '../../../types/Tournament'
+import { tournament } from '../../../types/Tournament'
 
 const RoomListPage = () => {
-  const [rooms, setRooms] = useState<tournaments[]>([])
+  const [rooms, setRooms] = useState<tournament[]>([])
   const [loading, setLoading] = useState(true)
 	const [isWating, setIsWating] = useState(false)
 	const [pageNumber, setPageNumber] = useState<number>(0)

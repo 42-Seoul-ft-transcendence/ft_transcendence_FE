@@ -1,39 +1,45 @@
 import { useEffect, useRef } from 'react'
+import { wsGameInfo } from '../../../types/Tournament'
 
-const GameBoard = () => {
+type Props = {
+	board: wsGameInfo | undefined
+}
+
+const GameBoard = ({ board }: Props) => {
 	const ballRef = useRef<HTMLImageElement>(null)
   const leftPaddleRef = useRef<HTMLImageElement>(null)
   const rightPaddleRef = useRef<HTMLImageElement>(null)
-
-	const positionRef = useRef({ x: 50, y: 50, dx: 0.2, dy: 0.1 })
+	const frameRef = useRef<number>(0)
 
 
 	useEffect(() => {
     const animate = () => {
-			const pos = positionRef.current
-
-      pos.x += pos.dx
-    	pos.y += pos.dy
-
-    	if (pos.x < 3 || pos.x > 97) pos.dx *= -1
-    	if (pos.y < 7 || pos.y > 93) pos.dy *= -1
-
       if (ballRef.current) {
-        ballRef.current.style.left = `${pos.x}%`
-        ballRef.current.style.top = `${pos.y}%`
+        ballRef.current.style.left = `${board?.ball.x}%`
+        ballRef.current.style.top = `${board?.ball.y}%`
+      }
+			if (leftPaddleRef.current) {
+        leftPaddleRef.current.style.top = `${board?.player1.y}%`
+      }
+			if (rightPaddleRef.current) {
+        rightPaddleRef.current.style.top = `${board?.player2.y}%`
       }
 
-			console.log("x: ", pos.x)
-			console.log("y: ", pos.y)
 
-      requestAnimationFrame(animate)
+      frameRef.current = requestAnimationFrame(animate)
     }
 
-    requestAnimationFrame(animate)
+    frameRef.current = requestAnimationFrame(animate)
+
+		return () => {
+      if (frameRef.current) {
+        cancelAnimationFrame(frameRef.current);
+      }
+    }
   }, [])
 
 	return (
-		<div className="relative w-[90vw] aspect-[144/53] max-w-[1100px]">
+		<div className="relative aspect-[144/53] w-[90vw] max-w-[1440px] h-auto left-1/2 transform -translate-x-1/2">
 			<img 
 				className="absolute top-0 left-0 w-full h-full object-cover z-0"
 				src="/src/assets/game/board.svg" />
@@ -74,6 +80,42 @@ const GameBoard = () => {
 			/>
 		</div>
 	)
+}
+
+export function PaddleControl(ws: WebSocket | null) {
+  const keyPressedRef = useRef<"ArrowUp" | "ArrowDown" | null>(null)
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.key === "ArrowUp" || e.key === "ArrowDown") && keyPressedRef.current !== e.key) {
+        keyPressedRef.current = e.key
+        sendDirection(e.key === "ArrowUp" ? "up" : "down")
+      }
+    }
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === keyPressedRef.current) {
+        keyPressedRef.current = null
+        sendDirection("stop")
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    window.addEventListener("keyup", handleKeyUp)
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown)
+      window.removeEventListener("keyup", handleKeyUp)
+    }
+  }, [])
+
+  const sendDirection = (direction: "up" | "down" | "stop") => {
+    if (ws?.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({ type: "move_paddle", data: direction }))
+    }
+  }
+
+  return null // 이 컴포넌트는 입력만 처리
 }
 
 export default GameBoard

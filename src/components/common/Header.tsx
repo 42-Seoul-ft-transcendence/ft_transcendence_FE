@@ -16,7 +16,7 @@ const Header = () => {
   const [isInvitationModal, setIsInvitationModal] = useState(false);
 
   const handleMainButton = () => {
-    navigate('/main');
+    navigate('/lobby');
   };
 
   return (

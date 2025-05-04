@@ -4,7 +4,7 @@ import fetchWithAuth from '../../utils/fetchWithAuth'
 import BasicButton from '../../common/BasicButton'
 import Modal from '../../common/Modal'
 import BlackProfile from '../../../assets/black_profile.svg'
-import { participants } from '../../../types/Tournament'
+import { participant } from '../../../types/Tournament'
 
 type ModalProps = {
 	isOpen: boolean
@@ -13,14 +13,14 @@ type ModalProps = {
 }
 
 type Props = {
-  player1?: participants | null
-	player2?: participants | null
+  player1?: participant | null
+	player2?: participant | null
 }
 
 function RoomModal({ isOpen, onClose, roomId }: ModalProps) {
 	if (!isOpen) return null // 모달이 닫혀 있으면 렌더링 안 함
   
-	const	[participants, setParticipants] = useState<participants[]>([])
+	const	[participants, setParticipants] = useState<participant[]>([])
 	const [roomType, setRoomType] = useState<string>("2P")
 	const	[inRoom, setInRoom] = useState<boolean>(false)
 	const navigate = useNavigate()
@@ -36,6 +36,18 @@ function RoomModal({ isOpen, onClose, roomId }: ModalProps) {
 			const data = await res.json()
 			setRoomType(data.type)
 			setParticipants(data.participants)
+
+			if (data.status === "IN_PROGRESS")
+			{
+					for (const match of data.matches)
+					{
+						for (const player of match?.players ?? [])
+						{
+							if (player.id === Number(localStorage.getItem("userId")))
+								navigate(`/game?tournamentId=${data.id}&matchId=${match.id}`)
+						}
+					}
+			}
 		} catch (error) {
 			if (error instanceof Error) {
 				alert(error.message)
@@ -80,9 +92,9 @@ function RoomModal({ isOpen, onClose, roomId }: ModalProps) {
 			<div className="relative flex flex-col justify-center">
 				<h1 className="flex justify-center text-yellow text-4xl mb-[10px]">Wating...</h1>
 				<div className="relative flex flex-col items-center justify-center w-[600px] h-[200px] gap-[15px]">
-					<PlayerProfile player1={participants[0] ? participants[0] : null} player2={participants[1] ? participants[1] : null}/>
+					<PlayerProfile player1={participants[participants.length - 1]} player2={participants[participants.length - 2]}/>
 					{roomType === "4P" &&
-						<PlayerProfile player1={participants[2] ? participants[2] : null} player2={participants[3] ? participants[3] : null}/>}
+						<PlayerProfile player1={participants[participants.length - 3]} player2={participants[participants.length - 4]}/>}
 				</div>
 			</div>
 			<BasicButton onClick={handleExit} className="!text-2xl !w-1/3 !h-1/5 cursor-pointer transition-transform hover:scale-105">Quit</BasicButton>

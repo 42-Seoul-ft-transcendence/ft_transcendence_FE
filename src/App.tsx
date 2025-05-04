@@ -8,6 +8,7 @@ import RegisterPage from './components/pages/RegisterPage.tsx';
 import VerifyPage from './components/pages/VerifyPage.tsx';
 import LobbyPage from './components/pages/lobby/LobbyPage.tsx';
 import RoomListPage from './components/pages/rooms/RoomListPage.tsx';
+import RoundTwoPage from './components/pages/game/RoundTwoPage.tsx';
 import GamePage from './components/pages/game/GamePage.tsx';
 import ProtectedRoute from './components/utils/ProtectedRoute.tsx';
 import NotFoundPage from './components/pages/NotFoundPage.tsx';
@@ -27,7 +28,8 @@ function App() {
       <Route path="/lobby" element={<ProtectedRoute><LobbyPage /></ProtectedRoute>} />
       <Route path="/rooms" element={<ProtectedRoute><RoomListPage /></ProtectedRoute>} />
       <Route path="/room/:roomid" element={<ProtectedRoute><RoomListPage /></ProtectedRoute>} />
-      <Route path="/game/:gameid" element={<ProtectedRoute><GamePage /></ProtectedRoute>} />
+      <Route path="/game" element={<ProtectedRoute><GamePage /></ProtectedRoute>} />
+      <Route path="/round2/:tournamentId" element={<ProtectedRoute><RoundTwoPage /></ProtectedRoute>} />
       <Route path="/*" element={<NotFoundPage />} />
     </Routes>
   )
