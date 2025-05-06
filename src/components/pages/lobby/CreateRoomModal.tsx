@@ -33,7 +33,7 @@ const CreateRoomModal = ({ isOpen, onClose }: Props) => {
     onClose()
     
     try {
-      const res = await fetchWithAuth(`${import.meta.env.VITE_API_BASE}/ft/api/tournaments`, {
+      const res = await fetchWithAuth(`${import.meta.env.VITE_API_BASE}/ft/api/tournaments`, navigate, {
         method: "POST",
         headers: { "Content-Type": "application/json", },
         body: JSON.stringify({ name: roomTitle, type: selectedMode }),

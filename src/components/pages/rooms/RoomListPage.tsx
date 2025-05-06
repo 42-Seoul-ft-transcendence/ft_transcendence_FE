@@ -36,7 +36,7 @@ const RoomListPage = () => {
 	}, [roomid, navigate])
 
   useEffect(() => {
-		fetchWithAuth(`${import.meta.env.VITE_API_BASE}/ft/api/tournaments?page=${pageNumber}&limit=5&type=${playerNumber}P`)
+		fetchWithAuth(`${import.meta.env.VITE_API_BASE}/ft/api/tournaments?page=${pageNumber}&limit=5&type=${playerNumber}P`, navigate)
 		.then((res) => {
 			if (!res.ok)
 				throw new Error()
@@ -70,7 +70,7 @@ const RoomListPage = () => {
 	}
 
 	const handleJoinRoom = async (roomId: number) => {
-		const result = await joinRoom(roomId)
+		const result = await joinRoom(roomId, navigate)
 		if (result) {
 			navigate(`/room/${roomId}`)
 			return
@@ -84,7 +84,7 @@ const RoomListPage = () => {
 		<>
 			<BackGroundImage backgroundImageUrl='/src/assets/background/background_basic.png'>
 				<Header />
-				<div className="flex flex-col gap-[2vh] items-center justify-center pt-24">
+				<div className="flex flex-col gap-[2vh] top-0 items-center justify-left pt-24">
 					<div className="flex w-24 gap-[2vh] justify-center mt-4">
 						<img
 							src={playerNumber === 2 ? Button2pActive : Button2pDefault}

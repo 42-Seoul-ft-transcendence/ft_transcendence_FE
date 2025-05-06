@@ -3,7 +3,7 @@ import fetchWithAuth from '../../utils/fetchWithAuth'
 async function joinRoom(roomId: number): Promise<boolean> {
 	try {
 		const res = await fetchWithAuth(
-			`${import.meta.env.VITE_API_BASE}/ft/api/tournaments/${roomId}/join`, 
+			`${import.meta.env.VITE_API_BASE}/ft/api/tournaments/${roomId}/join`, navigate,
 			{method: "POST"})
 
 		if (!res.ok) {

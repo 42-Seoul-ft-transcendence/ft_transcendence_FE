@@ -7,7 +7,7 @@ import MenuIcon from '../../assets/icon/menu.svg';
 import SideModal from '../modal/SideModal';
 import MypageContent from '../modal/MyPageContent';
 import BuddyContent from '../modal/BuddyContent';
-import InvitationContent from '../modal/InvitationContent';
+import InvitationContent from '../modal/BuddyRequestContent';
 
 const Header = () => {
   const navigate = useNavigate();
