@@ -44,7 +44,7 @@ function RoomModal({ isOpen, onClose, roomId }: ModalProps) {
 						for (const player of match?.players ?? [])
 						{
 							if (player.id === Number(localStorage.getItem("userId")))
-								navigate(`/game?tournamentId=${data.id}&matchId=${match.id}`)
+								navigate(`/game?tournamentId=${data.id}&matchId=${match.id}`, {replace: true})
 						}
 					}
 			}
@@ -103,27 +103,29 @@ function RoomModal({ isOpen, onClose, roomId }: ModalProps) {
 }
 
 const PlayerProfile = ({player1 = null, player2 = null}: Props) => {
+	const cssOption = "rounded-full border-2 border-black"
+	
 	return (
 		<div className="flex justify-center gap-[4vh]">
 			<div className="relative flex items-center justify-center flex-col">
-				<div className="relative w-1/3">
+				<div className={`relative w-1/3 ${player1 ? cssOption : ""} overflow-hidden`}>
 					<img
 						className="size-full"
 						src={BlackProfile} />
 					{player1 && <img
-						className="absolute inset-0 size-full rounded-full object-cover overflow-hidden"
+						className="absolute inset-0 size-full rounded-full object-cover"
 						src={player1.image} />}
 				</div>
 				<p className="text-white text-center text-2xl">{player1 ? player1.name : "???"}</p>
 			</div>
 			<p className="relative flex items-center justify-center text-2xl pb-3">VS</p>
 			<div className="relative flex items-center justify-center flex-col">
-				<div className="relative w-1/3">
+				<div className={`relative w-1/3 ${player2 ? cssOption : ""} overflow-hidden`}>
 					<img
 						className="size-full"
 						src={BlackProfile} />
 					{player2 && <img
-						className="absolute inset-0 size-full rounded-full object-cover overflow-hidden"
+						className="absolute inset-0 size-full rounded-full object-cover"
 						src={player2.image} />}
 					</div>
 				<p className="text-white text-center text-2xl">{player2 ? player2.name : "???"}</p>

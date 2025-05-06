@@ -1,25 +1,43 @@
 import { useEffect, useRef, useState } from 'react'
+import { wsGameInfo } from '../../../types/Tournament'
 
 type Props = {
 	isMulti: boolean
-	leftScore: number
-	rightScore: number
+	matchStatus: string
+	boardRef: React.RefObject<wsGameInfo>
 }
 
-const GameHeader = ({ isMulti, leftScore, rightScore }: Props) => {
-	const timer = useRef(0)
+const GameHeader = ({ isMulti, matchStatus, boardRef }: Props) => {
+	const intervalRef = useRef<number | null>(null)
+	const timer = useRef<number>(0)
 	const [minute, setMinute] = useState<string>("")
 	const [second, setSecond] = useState<string>("")
 
 	useEffect(() => {
-		const interval = setInterval(() => {
-			timer.current += 1
-			setMinute(String(Math.trunc(timer.current / 60)).padStart(2, "0"))
-			setSecond(String(Math.trunc(timer.current % 60)).padStart(2, "0"))
-		}, 1000)
+		if (matchStatus === "IN_PROGRESS") {
+			if (intervalRef.current !== null) return
 
-		return () => clearInterval(interval)
-	}, [])
+			intervalRef.current = window.setInterval(() => {
+				timer.current += 1
+				setMinute(String(Math.trunc(timer.current / 60)).padStart(2, "0"))
+				setSecond(String(Math.trunc(timer.current % 60)).padStart(2, "0"))
+			}, 1000)
+		}
+		if (matchStatus === "END") {
+			if (intervalRef.current !== null) {
+				clearInterval(intervalRef.current)
+				intervalRef.current = null
+			}
+		}
+
+		return () => {
+			if (intervalRef.current !== null) {
+				clearInterval(intervalRef.current)
+				intervalRef.current = null
+			}
+		}
+	}, [matchStatus])
+
 	return (
 		<div className="relative fixed top-0 flex justify-between aspect-[1440/88] w-[90vw] max-w-[1440px] left-1/2 transform -translate-x-1/2 mb-5">
 			<div className="relative w-1/5 max-w-[300px]">
@@ -33,13 +51,13 @@ const GameHeader = ({ isMulti, leftScore, rightScore }: Props) => {
 					<img
 						src="/src/assets/game/leftScore.svg"
 						className="w-[10vw] h-auto object-cover" />
-					<p className="absolute text-center left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[4vw]">{leftScore}</p>
+					<p className="absolute text-center left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[4vw]">{boardRef.current.player1.score}</p>
 				</div>
 				<div className="relative">
 					<img
 						src="/src/assets/game/rightScore.svg"
 						className="w-[10vw] h-auto object-cover" />
-					<p className="absolute text-center left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[4vw]">{rightScore}</p>
+					<p className="absolute text-center left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[4vw]">{boardRef.current.player2.score}</p>
 				</div>
 			</div>
 			<div className="relative items-center bg-[#444242] border-solid border-[5px] border-black border-2 w-[10vw] h-auto">

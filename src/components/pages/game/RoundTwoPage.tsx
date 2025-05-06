@@ -17,6 +17,7 @@ const RoundTwoPage = () => {
 	const navigate = useNavigate()
 
 	const { tournamentId } = useParams<{ tournamentId?: string }>()
+	const userId = Number(localStorage.getItem("userId"))
 
 	useEffect(() => {
 		if (!tournamentId || isNaN(+tournamentId)) {
@@ -24,7 +25,7 @@ const RoundTwoPage = () => {
 			navigate("/lobby", { replace: true })
 			return
 		}
-	}, [tournamentId])
+	}, [])
 
 	async function updateRoomInfo() {
 		try {
@@ -35,17 +36,21 @@ const RoundTwoPage = () => {
 			}
 
 			const data = await res.json()
-			for (const player of data.participants)
-			{
-				if (player.id === Number(localStorage.getItem("userId")))
-					setPlayer1(player)
+			if (!player1) {
+				for (const player of data.participants)
+				{
+					if (player.id === userId) {
+						setPlayer1(player)
+						break
+					}
+				}
 			}
 
 			if (data.matches[2]?.status === "IN_PROGRESS")
 			{
 				for (const player of data.matches[2].players)
 				{
-					if (player.id === Number(localStorage.getItem("userId")))
+					if (player.id === userId)
 						navigate(`/game?tournamentId=${data.id}&matchId=${data.matches[2].id}`)
 					else
 						setPlayer2(player)
@@ -55,7 +60,6 @@ const RoundTwoPage = () => {
 			if (error instanceof Error) {
 				alert(error.message)
 			}
-			handleExit()
 		}
 	}
 
@@ -65,16 +69,14 @@ const RoundTwoPage = () => {
     const intervalId = setInterval(updateRoomInfo, 3000)
     // 컴포넌트가 언마운트 될 때 인터벌 정리
     return () => clearInterval(intervalId)
-  }, []);
-
-	const handleExit = () => {}
+  }, [])
 
 	return (
 		<>
 			<BackGroundImage backgroundImageUrl='/src/assets/background/background_basic.png'>
-			<Modal isOpen={true} onClose={handleExit} backgroundClick={false} className="w-[600px] h-[350px]">
+			<Modal isOpen={true} onClose={() => {}} backgroundClick={false} className="w-[600px] h-[350px]">
 				<div className="relative flex flex-col justify-center">
-					<h1 className="flex justify-center text-yellow text-4xl mb-[10px]">Round&nbsp;2</h1>
+					<h1 className="flex justify-center text-yellow-300 text-4xl mb-[10px]">Round&nbsp;2</h1>
 					<div className="relative flex flex-col items-center justify-center w-[600px] h-[200px] gap-[15px]">
 						<PlayerProfile player1={player1 ? player1 : null} player2={player2 ? player2 : null}/>
 					</div>
@@ -86,27 +88,29 @@ const RoundTwoPage = () => {
 }
 
 const PlayerProfile = ({player1 = null, player2 = null}: Props) => {
+	const cssOption = "rounded-full border-2 border-black"
+	
 	return (
 		<div className="flex justify-center gap-[4vh]">
 			<div className="relative flex items-center justify-center flex-col">
-				<div className="relative w-1/3">
+				<div className={`relative w-1/3 ${player1 ? cssOption : ""} overflow-hidden`}>
 					<img
 						className="size-full"
 						src={BlackProfile} />
 					{player1 && <img
-						className="absolute inset-0 size-full rounded-full object-cover overflow-hidden"
+						className="absolute inset-0 size-full rounded-full object-cover"
 						src={player1.image} />}
 				</div>
 				<p className="text-white text-center text-2xl">{player1 ? player1.name : "???"}</p>
 			</div>
 			<p className="relative flex items-center justify-center text-2xl pb-3">VS</p>
 			<div className="relative flex items-center justify-center flex-col">
-				<div className="relative w-1/3">
+				<div className={`relative w-1/3 ${player2 ? cssOption : ""} overflow-hidden`}>
 					<img
 						className="size-full"
 						src={BlackProfile} />
 					{player2 && <img
-						className="absolute inset-0 size-full rounded-full object-cover overflow-hidden"
+						className="absolute inset-0 size-full rounded-full object-cover"
 						src={player2.image} />}
 					</div>
 				<p className="text-white text-center text-2xl">{player2 ? player2.name : "???"}</p>

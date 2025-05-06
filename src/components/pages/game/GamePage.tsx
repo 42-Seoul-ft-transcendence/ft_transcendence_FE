@@ -7,6 +7,7 @@ import UserProfile from './UserProfile'
 import BasicButton from '../../common/BasicButton'
 import fetchWithAuth from '../../utils/fetchWithAuth'
 import BlackProfile from '../../../assets/black_profile.svg'
+import Modal from '../../common/Modal'
 import { match, wsGameInfo } from '../../../types/Tournament'
 
 type Props = {
@@ -23,10 +24,16 @@ const GamePage = () => {
 	const matchId = searchParams.get("matchId")
 
 	const socketRef = useRef<WebSocket | null>(null)
+	const board = useRef<wsGameInfo>({
+		player1: { y: 215, score: 0, userId: 0 },
+		player2: { y: 215, score: 0, userId: 0 },
+		ball: { x: 720, y: 265 }
+	})
+	const [matchStatus, setMatchStatus] = useState<string>("PENDDING")
 	const [match, setMatch] = useState<match>()
 	const [isMulti, setIsMulti] = useState<boolean>(false)
-	const [matchStatus, setMatchStatus] = useState<string>("")
-	const [board, setBaord] = useState<wsGameInfo>()
+	const [isStarted, setIsStarted] = useState<boolean>(false)
+	const [waiting, setWaiting] = useState<string>("waitng...")
 
 	useEffect(() => {
 		if (!tournamentId || !matchId)
@@ -34,6 +41,8 @@ const GamePage = () => {
 			alert("잘못된 접근입니다.")
 			navigate("/lobby", {replace: true})
 		}
+
+		if (matchStatus === "IN_PROGRESS") return
 
 		const getTournamentInfo = async () => {
 			try {
@@ -47,11 +56,17 @@ const GamePage = () => {
 			
 				if (data.type === "4P")
 					setIsMulti(true)
-				for (const match of data.matches)
-				{
-					if (match.id === matchId)
+
+				let foundMatch = null
+				for (const match of data.matches) {
+					if (match.id === Number(matchId)) {
 						setMatch(match)
+						foundMatch = match
+						break
+					}
 				}
+				if (!foundMatch)
+					throw new Error("매치를 찾을 수 없습니다.")
 			} catch (error) {
 				if (error instanceof Error) {
 					alert(error.message)
@@ -61,63 +76,72 @@ const GamePage = () => {
 		}
 
 		getTournamentInfo()
-	}, [])
+	}, [matchStatus])
 
 	useEffect(() => {
+		if (!match || match.status === "COMPLETED" || !matchId) return
+
 		const str = `${import.meta.env.VITE_API_BASE}`
 		const api_base = str.replace("http://", "")
 
-		const ws = new WebSocket(`ws://${api_base}/ft/ws/match/${matchId}`)
-		socketRef.current = ws
+		const delayMs = 1000
 
-		const accessToken = localStorage.getItem("accessToken")
-		if (!accessToken)
-		{
-			alert("로그인이 필요합니다.")
-			navigate("/")
-		}
 
-		ws.onopen = () => {
-			console.log("✅ WebSocket 연결 성공");
-			ws.send(JSON.stringify({ "type" : "authenticate",
-															 "token" : accessToken }))
-		}
-	
-		ws.onmessage = (event) => {
-			console.log("📨 메시지 수신:", event.data);
-			if (event.data.type === "game_start")
-				setMatchStatus("IN_PROGRESS")
-			else if (matchStatus === "IN_PROGRESS" && event.data.type === "game_update")
-				setBaord(event.data.data)
-			else if (event.data.type === "game_end")
-				setMatchStatus("END")
-		}
+		const timeoutId = setTimeout(() => {
+			const ws = new WebSocket(`ws://${api_base}/ft/ws/match/${matchId}`)
+			socketRef.current = ws
 
-		ws.onerror = (err) => {
-			console.error("❌ WebSocket 에러", err);
-			alert("오류가 발생했습니다.")
-			navigate("/lobby")
-		}
+			const accessToken = localStorage.getItem("accessToken")
+			if (!accessToken) {
+				alert("로그인이 필요합니다.")
+				navigate("/")
+			}
 
-		ws.onclose = (e) => {
-			console.warn("🔌 WebSocket 연결 종료", e);
-		}
+			ws.onopen = () => {
+				ws.send(JSON.stringify({ "type" : "authenticate",
+																"token" : accessToken }))
+			}
+		
+			ws.onmessage = (event) => {
+				const data = JSON.parse(event.data)
+				if (data.type === "game_start") {
+					setIsStarted(true)
+					setMatchStatus("IN_PROGRESS")
+				}
+				else if (data.type === "waiting")
+					setWaiting(data.countDown)
+				else if (data.type === "game_update")
+					board.current = data.data
+				else if (data.type === "game_end")
+					setMatchStatus("COMPLETED")
+			}
+
+			ws.onerror = () => {
+				alert("오류가 발생했습니다.")
+				navigate("/lobby")
+			}
+
+			ws.onclose = () => {
+			}
+		}, delayMs)
 	
 		return () => {
-			console.log("🧹 WebSocket cleanup");
-			ws.close()
+			console.log("🧹 WebSocket cleanup")
+			clearTimeout(timeoutId)
+			socketRef.current?.close()
 		}
-	}, [])
+	}, [match])
 
-	PaddleControl(socketRef.current)
+	PaddleControl(socketRef.current, isStarted)
 
 	return (
 		<>
 			<BackGroundImage backgroundImageUrl='/src/assets/background/background_basic.png'>
-				{matchStatus === "END" ? <MatchResult match={match} isMulti={isMulti} tournamentId={tournamentId}/> : (
+				<Modal isOpen={!isStarted && match?.status !== "COMPLETED"} onClose={() => {}} className="w-[360px] h-[210px] text-3xl">{waiting}</Modal>
+				{match?.status === "COMPLETED" ? <MatchResult match={match} isMulti={isMulti} tournamentId={tournamentId}/> : (
 					<div className="relative flex flex-col w-full">
-						<GameHeader isMulti={true} leftScore={3} rightScore={1}/>
-						<GameBoard board={board}/>
+						<GameHeader isMulti={isMulti} matchStatus={matchStatus} boardRef={board}/>
+						<GameBoard boardRef={board}/>
 						<UserProfile match={match}/>
 					</div>
 				)}
@@ -127,53 +151,59 @@ const GamePage = () => {
 }
 
 const MatchResult = ({ match, isMulti, tournamentId }: Props) => {
+	if (!match || match.status !== "COMPLETED") return null
+
 	const navigate = useNavigate()
 	const [isWinner, setIsWinner] = useState<boolean>(false)
 	
-	const userId = localStorage.getItem("userId")
-	for (const player of match!.players)
-	{
-		if (player.id + "" === userId)
+	useEffect(() => {
+		if (!match) return
+		
+		const userId = localStorage.getItem("userId")
+		const player = match.players.find(p => p.id === Number(userId))
+		if (player) {
 			setIsWinner(player.isWinner)
-	}
+		}
+	}, [match])
 
 	const handleButton = () => {
 		if (!isMulti)
 			navigate("/lobby", {replace: true})
-		navigate(`/round2/${tournamentId}`, {replace: true})
+		else 
+			navigate(`/round2/${tournamentId}`, {replace: true})
 	}
 
 	return (
 		<div className="relative flex flex-col items-center w-80% h-80% border rounded bg-[#D9FBF6] gap-[3vh]">
-			<h1 className="text-white">You&nbsp;{isWinner ? "Win!" : "Lose..."}</h1>
+			<h1 className="text-gray-500 text-5xl">You&nbsp;{isWinner ? "Win!" : "Lose..."}</h1>
 			<div className="flex justify-center gap-[4vh]">
 				<div className="relative flex items-center justify-center flex-col">
-					<div className="relative w-1/3">
+					<div className="relative w-1/3 rounded-full border-2 border-black overflow-hidden">
 						<img
 							className="size-full"
 							src={BlackProfile} />
 						<img
-							className="absolute inset-0 size-full rounded-full object-cover overflow-hidden"
-							src={match!.players[0].image} />
+							className="absolute inset-0 size-full rounded-full object-cover"
+							src={match.players[0].image} />
 					</div>
-					<p className="text-white text-center text-2xl">{match!.players[0].name}</p>
+					<p className="text-blacktext-center text-2xl">{match.players[0].name}</p>
 				</div>
-				<p className="relative flex items-center justify-center text-2xl text-yellow">
-					{match!.players[0].score}&nbsp;:&nbsp;{match!.players[1].score}
+				<p className="relative flex items-center justify-center text-8xl text-green-300 font-mono">
+					{match!.players[0].score}&nbsp;:&nbsp;{match.players[1].score}
 				</p>
 				<div className="relative flex items-center justify-center flex-col">
-					<div className="relative w-1/3">
+					<div className="relative w-1/3 rounded-full border-2 border-black overflow-hidden">
 						<img
 							className="size-full"
 							src={BlackProfile} />
 						<img
-							className="absolute inset-0 size-full rounded-full object-cover overflow-hidden"
-							src={match!.players[1].image} />
+							className="absolute inset-0 size-full rounded-full object-cover"
+							src={match.players[1].image} />
 						</div>
-					<p className="text-white text-center text-2xl">{match!.players[1].name}</p>
+					<p className="text-black text-center text-2xl">{match.players[1].name}</p>
 				</div>
 			</div>
-			<BasicButton onClick={handleButton}>{isMulti ? "Next" : "Back&nbsp;to&nbsp;Lobby"}</BasicButton>
+			<BasicButton onClick={handleButton}>{isMulti ? "Next" : "Back to Lobby"}</BasicButton>
 		</div>
 	)
 }
