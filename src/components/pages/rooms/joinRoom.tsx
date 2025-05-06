@@ -1,6 +1,6 @@
 import fetchWithAuth from '../../utils/fetchWithAuth'
 
-async function joinRoom(roomId: number): Promise<boolean> {
+async function joinRoom(roomId: number, navigate: (path: string) => void): Promise<boolean> {
 	try {
 		const res = await fetchWithAuth(
 			`${import.meta.env.VITE_API_BASE}/ft/api/tournaments/${roomId}/join`, navigate,
