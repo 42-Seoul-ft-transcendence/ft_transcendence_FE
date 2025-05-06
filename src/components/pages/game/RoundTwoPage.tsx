@@ -29,7 +29,7 @@ const RoundTwoPage = () => {
 
 	async function updateRoomInfo() {
 		try {
-			const res = await fetchWithAuth(`${import.meta.env.VITE_API_BASE}/ft/api/tournaments/${tournamentId}`)
+			const res = await fetchWithAuth(`${import.meta.env.VITE_API_BASE}/ft/api/tournaments/${tournamentId}`, navigate)
 			if (!res.ok) {
 				const errorData = await res.json()
 				throw new Error(errorData.message)

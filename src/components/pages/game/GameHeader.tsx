@@ -10,8 +10,8 @@ type Props = {
 const GameHeader = ({ isMulti, matchStatus, boardRef }: Props) => {
 	const intervalRef = useRef<number | null>(null)
 	const timer = useRef<number>(0)
-	const [minute, setMinute] = useState<string>("")
-	const [second, setSecond] = useState<string>("")
+	const [minute, setMinute] = useState<string>("00")
+	const [second, setSecond] = useState<string>("00")
 
 	useEffect(() => {
 		if (matchStatus === "IN_PROGRESS") {
