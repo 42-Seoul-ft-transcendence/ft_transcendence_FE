@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import ReactDom from 'react-dom'
 
 type SideModalProps = {
   isOpen: boolean;
@@ -7,6 +8,8 @@ type SideModalProps = {
 };
 
 const SideModal = ({ isOpen, onClose, children }: SideModalProps) => {
+  if (!isOpen) return null
+  
   const modalRef = useRef<HTMLDivElement>(null);
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -15,7 +18,7 @@ const SideModal = ({ isOpen, onClose, children }: SideModalProps) => {
     }
   };
 
-  return (
+  return ReactDom.createPortal(
     <div
       className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ease-in-out ${
         isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
@@ -37,7 +40,7 @@ const SideModal = ({ isOpen, onClose, children }: SideModalProps) => {
         </button>
         <div className="p-6">{children}</div>
       </div>
-    </div>
+    </div>, document.body
   );
 };
 

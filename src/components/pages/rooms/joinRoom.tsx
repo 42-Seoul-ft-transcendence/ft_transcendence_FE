@@ -1,11 +1,5 @@
 import fetchWithAuth from '../../utils/fetchWithAuth'
 
-interface participants {
-	id: number
-	name: string
-	image: string
-}
-
 async function joinRoom(roomId: number, navigate: (path: string) => void): Promise<boolean> {
 	try {
 		const res = await fetchWithAuth(
