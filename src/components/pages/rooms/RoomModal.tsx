@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import fetchWithAuth from '../../utils/fetchWithAuth'
 import BasicButton from '../../common/BasicButton'
@@ -13,6 +13,7 @@ type ModalProps = {
 }
 
 type Props = {
+	isReady: boolean
   player1?: participant | null
 	player2?: participant | null
 }
@@ -23,6 +24,7 @@ function RoomModal({ isOpen, onClose, roomId }: ModalProps) {
 	const	[participants, setParticipants] = useState<participant[]>([])
 	const [roomType, setRoomType] = useState<string>("2P")
 	const	[inRoom, setInRoom] = useState<boolean>(false)
+	const [isReady, setIsReady] = useState<boolean>(false)
 	const navigate = useNavigate()
 
 	async function updateRoomInfo() {
@@ -37,14 +39,18 @@ function RoomModal({ isOpen, onClose, roomId }: ModalProps) {
 			setRoomType(data.type)
 			setParticipants(data.participants)
 
-			if (data.status === "IN_PROGRESS")
-			{
-					for (const match of data.matches)
-					{
-						for (const player of match?.players ?? [])
-						{
-							if (player.id === Number(localStorage.getItem("userId")))
+			if (data.status === "IN_PROGRESS") {
+				let player = data.matches[0].players
+				if (data.type === "4P")
+					player = [...player, ...data.matches[1].players]
+				setParticipants(player)
+				setIsReady(true)
+					for (const match of data.matches) {
+						for (const player of match?.players ?? []) {
+							if (player.id === Number(localStorage.getItem("userId"))) {
+								await new Promise((resolve) => setTimeout(resolve, 2000))
 								navigate(`/game?tournamentId=${data.id}&matchId=${match.id}`, {replace: true})
+							}
 						}
 					}
 			}
@@ -63,7 +69,7 @@ function RoomModal({ isOpen, onClose, roomId }: ModalProps) {
     const intervalId = setInterval(updateRoomInfo, 3000)
     // 컴포넌트가 언마운트 될 때 인터벌 정리
     return () => clearInterval(intervalId)
-  }, []);
+  }, [])
 
 	const handleExit = () => {
 		setInRoom(false)
@@ -89,20 +95,21 @@ function RoomModal({ isOpen, onClose, roomId }: ModalProps) {
 
 	return (
 		<Modal isOpen={inRoom} onClose={handleExit} backgroundClick={false} className="w-[600px] h-[350px]">
-			<div className="relative flex flex-col justify-center">
-				<h1 className="flex justify-center text-yellow text-4xl mb-[10px]">Wating...</h1>
-				<div className="relative flex flex-col items-center justify-center w-[600px] h-[200px] gap-[15px]">
-					<PlayerProfile player1={participants[participants.length - 1]} player2={participants[participants.length - 2]}/>
-					{roomType === "4P" &&
-						<PlayerProfile player1={participants[participants.length - 3]} player2={participants[participants.length - 4]}/>}
-				</div>
-			</div>
-			<BasicButton onClick={handleExit} className="!text-2xl !w-1/3 !h-1/5 cursor-pointer transition-transform hover:scale-105">Quit</BasicButton>
+					<div className="relative flex flex-col justify-center">
+						{isReady ? <h1 className="flex justify-center text-yellow-300 text-5xl mb-[10px]">Round&nbsp;1</h1> :
+							<h1 className="flex justify-center text-4xl mb-[10px]">Waiting...</h1>}
+						<div className="relative flex flex-col items-center justify-center w-[600px] h-[200px] gap-[15px]">
+							<PlayerProfile player1={participants?.[0]} player2={participants?.[1]} isReady={isReady}/>
+							{roomType === "4P" && <PlayerProfile player1={participants?.[2]} player2={participants?.[3]} isReady={isReady}/>}
+						</div>
+					</div>
+					{!isReady && 
+						<BasicButton onClick={handleExit} className="!text-2xl !w-1/3 !h-1/5 cursor-pointer transition-transform hover:scale-105">Quit</BasicButton>}
 		</Modal>
 	)
 }
 
-const PlayerProfile = ({player1 = null, player2 = null}: Props) => {
+const PlayerProfile = ({ isReady, player1 = null, player2 = null }: Props) => {
 	const cssOption = "rounded-full border-2 border-black"
 	
 	return (
@@ -118,7 +125,7 @@ const PlayerProfile = ({player1 = null, player2 = null}: Props) => {
 				</div>
 				<p className="text-white text-center text-2xl">{player1 ? player1.name : "???"}</p>
 			</div>
-			<p className="relative flex items-center justify-center text-2xl pb-3">VS</p>
+			{isReady && <p className="relative flex items-center justify-center text-2xl pb-3">VS</p>}
 			<div className="relative flex items-center justify-center flex-col">
 				<div className={`relative w-1/3 ${player2 ? cssOption : ""} overflow-hidden`}>
 					<img

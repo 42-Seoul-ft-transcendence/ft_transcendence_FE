@@ -12,6 +12,11 @@ async function fetchWithAuth(input: RequestInfo, navigate: (path: string) => voi
 
   const response = await fetch(input, modifiedInit)
 
+  if (response.status === 500) {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    navigate("/")
+  }
   if (response.status !== 401) return response
 
   // accessToken 만료 시도
