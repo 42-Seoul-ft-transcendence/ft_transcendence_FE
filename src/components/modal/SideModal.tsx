@@ -8,6 +8,8 @@ type SideModalProps = {
 };
 
 const SideModal = ({ isOpen, onClose, children }: SideModalProps) => {
+  if (!isOpen) return null
+  
   const modalRef = useRef<HTMLDivElement>(null);
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
