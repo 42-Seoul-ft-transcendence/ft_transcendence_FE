@@ -2,6 +2,7 @@ export type UserInfo = {
   id: number;
   name: string;
   image: string;
+  twoFactorEnabled: boolean;
   wins: number;
   losses: number;
 };

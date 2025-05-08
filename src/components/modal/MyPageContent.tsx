@@ -63,7 +63,6 @@ const MypageContent = () => {
       <div className="flex flex-row items-center gap-8">
         <img
           src={userInfo.image ? userInfo.image : ProfilePlaceholder}
-          // src="https://drive.google.com/uc?export=view&id=1Zl9TfYgLIS1OhmkzhbEEaYMvu8a5PJ8m"
           className="w-[100px] h-[100px] rounded-full object-cover"
         />
         <div className="text-5xl text-white">{userInfo.name}</div>
@@ -196,6 +195,7 @@ const MypageContent = () => {
               }
             })();
           }}
+          initial2FAEnabled={userInfo.twoFactorEnabled}
         />
       </SideModal>
     </div>
