@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SettingIcon from '../../assets/icon/setting.svg';
 import BasicButton from '../common/BasicButton';
+import fetchWithAuth from '../utils/fetchWithAuth';
 
 type EditProfileContentProps = {
   onSaveSuccess: () => void;
+  initial2FAEnabled: boolean;
 };
 
-function EditProfileContent({ onSaveSuccess }: EditProfileContentProps) {
+function EditProfileContent({ onSaveSuccess, initial2FAEnabled }: EditProfileContentProps) {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null); // ✅ 추가
-  const [is2FAEnabled, setIs2FAEnabled] = useState(false);
+  const [is2FAEnabled, setIs2FAEnabled] = useState(initial2FAEnabled);
   const [nickname, setNickname] = useState('');
   const navigate = useNavigate();
 
@@ -28,25 +30,24 @@ function EditProfileContent({ onSaveSuccess }: EditProfileContentProps) {
   };
 
   const handle2FAToggle = async () => {
-    if (is2FAEnabled) {
+    if (!is2FAEnabled) {
+      // ✅ 2FA 비활성화: API 호출
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE}/ft/api/auth/2fa`, {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-          },
-        });
+        const res = await fetchWithAuth(
+          `${import.meta.env.VITE_API_BASE}/ft/api/auth/2fa`,
+          navigate,
+          { method: 'DELETE' },
+        );
 
         if (!res.ok) throw new Error('2FA 비활성화 실패');
 
-        setIs2FAEnabled(false);
         alert('2FA has been disabled.');
+        setIs2FAEnabled(false); // 상태 갱신
       } catch (err) {
         console.error('❌ 2FA 비활성화 실패:', err);
         alert('Failed to disable 2FA');
       }
     } else {
-      setIs2FAEnabled(true);
       navigate('/register');
     }
   };
@@ -145,8 +146,8 @@ function EditProfileContent({ onSaveSuccess }: EditProfileContentProps) {
           onClick={handle2FAToggle}
           className={`px-6 py-2 text-xl h-10 flex items-center rounded-md font-bold border-4 ${
             is2FAEnabled
-              ? 'bg-white text-red-500 border-red-500'
-              : 'bg-white text-green-600 border-green-500'
+              ? 'bg-white text-[#858787] border-[#858787]'
+              : 'bg-white text-green-500 border-green-500'
           }`}
         >
           {is2FAEnabled ? 'Disable' : 'Enable'}
