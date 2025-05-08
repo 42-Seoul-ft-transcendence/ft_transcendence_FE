@@ -3,7 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import SettingIcon from '../../assets/icon/setting.svg';
 import BasicButton from '../common/BasicButton';
 
-function EditProfileContent() {
+type EditProfileContentProps = {
+  onSaveSuccess: () => void;
+};
+
+function EditProfileContent({ onSaveSuccess }: EditProfileContentProps) {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null); // ✅ 추가
   const [is2FAEnabled, setIs2FAEnabled] = useState(false);
@@ -79,6 +83,7 @@ function EditProfileContent() {
       }
 
       alert('Profile successfully updated!');
+      onSaveSuccess();
     } catch (error) {
       console.error('❌ 저장 실패:', error);
       alert('Failed to save changes');

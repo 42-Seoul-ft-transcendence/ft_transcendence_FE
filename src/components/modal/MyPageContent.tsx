@@ -62,8 +62,8 @@ const MypageContent = () => {
       {/* 유저 프로필 */}
       <div className="flex flex-row items-center gap-8">
         <img
-          // src={userInfo.image ? userInfo.image : ProfilePlaceholder}
-          src="https://drive.google.com/uc?export=view&id=1Zl9TfYgLIS1OhmkzhbEEaYMvu8a5PJ8m"
+          src={userInfo.image ? userInfo.image : ProfilePlaceholder}
+          // src="https://drive.google.com/uc?export=view&id=1Zl9TfYgLIS1OhmkzhbEEaYMvu8a5PJ8m"
           className="w-[100px] h-[100px] rounded-full"
         />
         <div className="text-5xl text-white">{userInfo.name}</div>
@@ -172,7 +172,31 @@ const MypageContent = () => {
           setIsEditModalOpen(false);
         }}
       >
-        <EditProfileContent />
+        <EditProfileContent
+          onSaveSuccess={() => {
+            setIsEditModalOpen(false); // 모달 닫기
+            setLoading(true); // 로딩 처리
+            setError(null); // 에러 초기화
+
+            // 다시 fetch
+            (async () => {
+              try {
+                const userResponse = await fetchWithAuth(
+                  `${import.meta.env.VITE_API_BASE}/ft/api/users/me`,
+                  navigate,
+                  { method: 'GET' },
+                );
+                const userData = await userResponse.json();
+                setUserInfo(userData);
+              } catch (err) {
+                console.error('❌ 프로필 갱신 실패:', err);
+                setError('프로필 갱신 실패');
+              } finally {
+                setLoading(false);
+              }
+            })();
+          }}
+        />
       </SideModal>
     </div>
   );
