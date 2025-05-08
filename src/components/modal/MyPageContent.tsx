@@ -64,7 +64,7 @@ const MypageContent = () => {
         <img
           src={userInfo.image ? userInfo.image : ProfilePlaceholder}
           // src="https://drive.google.com/uc?export=view&id=1Zl9TfYgLIS1OhmkzhbEEaYMvu8a5PJ8m"
-          className="w-[100px] h-[100px] rounded-full"
+          className="w-[100px] h-[100px] rounded-full object-cover"
         />
         <div className="text-5xl text-white">{userInfo.name}</div>
         <img
