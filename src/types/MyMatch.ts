@@ -1,7 +1,7 @@
 export type UserInfo = {
   id: number;
   name: string;
-  imgURL: string;
+  image: string;
   wins: number;
   losses: number;
 };

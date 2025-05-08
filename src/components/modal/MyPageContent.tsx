@@ -4,6 +4,8 @@ import ProfilePlaceholder from '../../assets/black_profile.svg';
 import SettingIcon from '../../assets/icon/setting.svg';
 import { MatchInfo, MatchesResponse, UserInfo } from '../../types/MyMatch';
 import { useNavigate } from 'react-router-dom';
+import EditProfileContent from './EditProfileContent';
+import SideModal from './SideModal';
 // import { mockMatches } from '../../mocks/matches';
 
 const MypageContent = () => {
@@ -12,6 +14,7 @@ const MypageContent = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const matchesPerPage = 5;
   const navigate = useNavigate();
 
@@ -25,6 +28,7 @@ const MypageContent = () => {
         );
         const userData = await userResponse.json();
         setUserInfo(userData);
+        console.log(userData);
 
         const matchesResponse = await fetchWithAuth(
           `${import.meta.env.VITE_API_BASE}/ft/api/users/me/matches/history`,
@@ -57,9 +61,17 @@ const MypageContent = () => {
     <div className="flex flex-col items-center gap-4 p-6">
       {/* 유저 프로필 */}
       <div className="flex flex-row items-center gap-8">
-        <img src={ProfilePlaceholder} className="w-[100px] h-[100px]" />
+        <img
+          src={userInfo.image ? userInfo.image : ProfilePlaceholder}
+          // src="https://drive.google.com/uc?export=view&id=1Zl9TfYgLIS1OhmkzhbEEaYMvu8a5PJ8m"
+          className="w-[100px] h-[100px] rounded-full object-cover"
+        />
         <div className="text-5xl text-white">{userInfo.name}</div>
-        <img src={SettingIcon} />
+        <img
+          src={SettingIcon}
+          onClick={() => setIsEditModalOpen(true)}
+          className="cursor-pointer"
+        />
       </div>
 
       <hr className="w-full h-[3px] bg-[#2c2c2c] my-2 border-none" />
@@ -153,6 +165,39 @@ const MypageContent = () => {
           </div>
         </>
       )}
+
+      <SideModal
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+        }}
+      >
+        <EditProfileContent
+          onSaveSuccess={() => {
+            setIsEditModalOpen(false); // 모달 닫기
+            setLoading(true); // 로딩 처리
+            setError(null); // 에러 초기화
+
+            // 다시 fetch
+            (async () => {
+              try {
+                const userResponse = await fetchWithAuth(
+                  `${import.meta.env.VITE_API_BASE}/ft/api/users/me`,
+                  navigate,
+                  { method: 'GET' },
+                );
+                const userData = await userResponse.json();
+                setUserInfo(userData);
+              } catch (err) {
+                console.error('❌ 프로필 갱신 실패:', err);
+                setError('프로필 갱신 실패');
+              } finally {
+                setLoading(false);
+              }
+            })();
+          }}
+        />
+      </SideModal>
     </div>
   );
 };

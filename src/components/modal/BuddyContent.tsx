@@ -84,7 +84,7 @@ const BuddyContent = () => {
         <img
           src={AddBuddyIcon}
           onClick={() => setIsAddModalOpen(true)}
-          className="absolute right-0 top-1/2 -translate-y-1/2"
+          className="absolute right-0 top-1/2 -translate-y-1/2 cursor-pointer"
           alt="Add buddy"
         />
       </div>
